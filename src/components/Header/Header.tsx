@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import Dropdown from '../Dropdown/Dropdown';
+import { HelpModalContext } from '../Modal/HelpModalContext';
 
 import './Header.scss';
 
@@ -12,8 +13,9 @@ const Header = () => {
 	const [repo, setRepo] = useState('');
 	const [commits, setCommits] = useState([] as string[]);
 	const [selectedCommits, setSelectedCommits] = useState({ start: '', end: '' });
+	const [, setOpen] = useContext(HelpModalContext);
 
-	const doSomething = () => {
+	const sendRequest = () => {
 		console.log(repo);
 		setCommits([
 			'commit #1',
@@ -31,7 +33,7 @@ const Header = () => {
 
 	const handleKeyDown = (e: any) => {
 		if (e.key === 'Enter') {
-			doSomething();
+			sendRequest();
 		}
 	};
 
@@ -44,7 +46,7 @@ const Header = () => {
 	};
 
 	const showHelp = () => {
-		
+		setOpen(true);
 	};
 
 	return (
@@ -78,7 +80,7 @@ const Header = () => {
 						id='repoSend'
 						variant='contained'
 						color='secondary'
-						onClick={() => doSomething()}
+						onClick={() => sendRequest()}
 					>
 						>
 					</Button>
