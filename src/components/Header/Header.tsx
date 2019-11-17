@@ -13,9 +13,10 @@ const Header = () => {
 	const [repo, setRepo] = useState('');
 	const [commits, setCommits] = useState([] as string[]);
 	const [selectedCommits, setSelectedCommits] = useState({ start: '', end: '' });
-	const [, setOpen] = useContext(HelpModalContext);
+	const setOpen: Function = useContext(HelpModalContext)[1];
 
 	const sendRequest = () => {
+		// TODO
 		console.log(repo);
 		setCommits([
 			'commit #1',
@@ -58,7 +59,7 @@ const Header = () => {
 				justify='space-evenly'
 			>
 				<Grid item xs={12}>
-					<span className='heading'>IT-DEPENDS</span>
+					<span className='heading'>IT DEPENDS</span>
 					<IconButton className='help' aria-label='help' onClick={showHelp}>
 						<HelpOutlineIcon />
 					</IconButton>
