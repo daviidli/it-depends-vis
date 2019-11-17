@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import Dropdown from '../Dropdown/Dropdown';
 
 import './Header.scss';
@@ -41,6 +43,10 @@ const Header = () => {
 		setSelectedCommits(prev => ({ ...prev, end: commit }));
 	};
 
+	const showHelp = () => {
+		
+	};
+
 	return (
 		<div className='headerContainer'>
 			<Grid
@@ -51,6 +57,9 @@ const Header = () => {
 			>
 				<Grid item xs={12}>
 					<span className='heading'>IT-DEPENDS</span>
+					<IconButton className='help' aria-label='help' onClick={showHelp}>
+						<HelpOutlineIcon />
+					</IconButton>
 				</Grid>
 				<Grid item xs={10} sm={11} md={4}>
 					<TextField
