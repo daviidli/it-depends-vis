@@ -4,7 +4,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
-import CommitDropdown from './CommitDropdown/CommitDropdown';
+import CommitDropdown from './CommitDropdown';
 import { HelpModalContext } from '../Modal/HelpModalContext';
 
 import './Header.scss';
