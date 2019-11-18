@@ -2,7 +2,7 @@
 	width: 100%;
 	position: absolute;
 	bottom: 0;
-	margin-bottom: 20px;
+	margin-bottom: 16px;
 
 	.dropdown {
 		width: 90%;
@@ -10,19 +10,26 @@
 	
 		&.wide {
 			width: 70%;
-			transform: translateX(5%);
 		}
 	}
 
-	.slider {
-		width: 90%;
-		transform: translateX(5%);
-		margin-bottom: -12px;
-	}
-
-	.sliderLabel {
-		margin-top: 8px;
-		margin-left: 20px;
-		margin-bottom: 3px;
+	.sliderContainer {
+		.slider {
+			width: 90%;
+			transform: translateX(5%);
+			margin-bottom: -8px;
+	
+			&.wide {
+				transform: translateX(0%);
+			}
+		}
+	
+		.sliderLabel {
+			font-size:12px;
+			color: grey;
+			margin-top: 16px;
+			margin-left: 20px;
+			margin-bottom: 8px;
+		}
 	}
 }

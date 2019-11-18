@@ -11,6 +11,7 @@ const Footer = () => {
 	const [value, setValue] = useState<number[]>([0, 100]);
 
 	const types: Array<string> = ['Files', 'Classes', 'Functions'];
+	const isWide: boolean = window.innerWidth > 550;
 
 	return (
 		<Grid 
@@ -21,7 +22,7 @@ const Footer = () => {
 		>
 			<Grid item xs={12} sm={5}>
 				<Dropdown
-					className={clsx({ wide: window.innerWidth > 550})}
+					className={clsx({ wide: isWide })}
 					selectedValue={selectedType}
 					label='Granularity'
 					disabled={false}
@@ -30,10 +31,10 @@ const Footer = () => {
 				/>
 			</Grid>
 			<Grid item xs={12} sm={1}></Grid>
-			<Grid item xs={12} sm={3}>
+			<Grid item xs={12} sm={3} className='sliderContainer'>
 				<div className='sliderLabel'>Percentage Range</div>
 				<Slider
-					className='slider'
+					className={clsx('slider', { wide: isWide })}
 					value={value}
 					onChange={(e: any, newVal: number | number[]) => setValue(newVal as number[])}
 					valueLabelDisplay='auto'
