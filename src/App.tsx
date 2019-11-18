@@ -3,6 +3,7 @@ import Header from './components/Header/Header';
 import HelpModal from './components/Modal/HelpModal';
 import HelpModalContextProvider from './components/Modal/HelpModalContext';
 import Footer from './components/Footer/Footer';
+import Visualization from './components/Visualization/Visualization';
 
 const App = () => {
 	return (
@@ -11,6 +12,7 @@ const App = () => {
 				<HelpModal />
 				<Header />
 			</HelpModalContextProvider>
+			<Visualization />
 			<Footer />
 		</div>
 	);
