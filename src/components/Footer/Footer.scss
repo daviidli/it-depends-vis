@@ -1,0 +1,28 @@
+.footer {
+	width: 100%;
+	position: absolute;
+	bottom: 0;
+	margin-bottom: 20px;
+
+	.dropdown {
+		width: 90%;
+		transform: translateX(5%);
+	
+		&.wide {
+			width: 70%;
+			transform: translateX(5%);
+		}
+	}
+
+	.slider {
+		width: 90%;
+		transform: translateX(5%);
+		margin-bottom: -12px;
+	}
+
+	.sliderLabel {
+		margin-top: 8px;
+		margin-left: 20px;
+		margin-bottom: 3px;
+	}
+}

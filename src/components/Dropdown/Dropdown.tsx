@@ -3,6 +3,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import clsx from 'clsx';
 
 import './Dropdown.scss';
 
@@ -12,10 +13,11 @@ export interface DropdownProps<T> {
 	disabled: boolean,
 	setSelectedValue: Function,
 	values: Array<T>,
+	className?: string
 };
 
 const Dropdown = (props: DropdownProps<string>) => {
-	const { selectedValue, label, disabled, setSelectedValue, values } = props;
+	const { selectedValue, label, disabled, setSelectedValue, values, className } = props;
 
 	const [labelWidth, setLabelWidth] = useState(0);
 	const inputLabel = useRef<HTMLLabelElement>(null);
@@ -25,7 +27,7 @@ const Dropdown = (props: DropdownProps<string>) => {
 	}, []);
 
 	return (
-		<FormControl variant='outlined' className='dropdown' disabled={disabled}>
+		<FormControl variant='outlined' className={clsx('dropdown', className)} disabled={disabled}>
 			<InputLabel ref={inputLabel} id={label} className='label' margin='dense'>
 				{ label }
 			</InputLabel>
