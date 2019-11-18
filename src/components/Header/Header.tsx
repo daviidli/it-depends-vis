@@ -4,7 +4,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
-import Dropdown from '../Dropdown/Dropdown';
+import CommitDropdown from './CommitDropdown';
 import { HelpModalContext } from '../Modal/HelpModalContext';
 
 import './Header.scss';
@@ -88,7 +88,7 @@ const Header = () => {
 				</Grid>
 				<Grid item xs={12} sm={12} md={3}></Grid>
 				<Grid item xs={6} sm={6} md={2}>
-					<Dropdown
+					<CommitDropdown
 						label='Start Commit'
 						selectedCommit={selectedCommits.start}
 						showCommitsAfter={''}
@@ -97,7 +97,7 @@ const Header = () => {
 					/>
 				</Grid>
 				<Grid item xs={6} sm={6} md={2}>
-					<Dropdown
+					<CommitDropdown
 						label='End Commit'
 						selectedCommit={selectedCommits.end}
 						showCommitsAfter={selectedCommits.start}
@@ -107,7 +107,6 @@ const Header = () => {
 				</Grid>
 			</Grid>
 		</div>
-		
 	);
 }
 

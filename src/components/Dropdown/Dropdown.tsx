@@ -3,19 +3,21 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import clsx from 'clsx';
 
 import './Dropdown.scss';
 
-export interface DropdownProps {
+export interface DropdownProps<T> {
+	selectedValue: T,
 	label: string,
-	selectedCommit: string,
-	showCommitsAfter: string,
-	setSelectedCommit: Function,
-	commits: Array<string>,
+	disabled: boolean,
+	setSelectedValue: Function,
+	values: Array<T>,
+	className?: string
 };
 
-const Dropdown = (props: DropdownProps) => {
-	const { label, selectedCommit, showCommitsAfter, setSelectedCommit, commits } = props;
+const Dropdown = (props: DropdownProps<string>) => {
+	const { selectedValue, label, disabled, setSelectedValue, values, className } = props;
 
 	const [labelWidth, setLabelWidth] = useState(0);
 	const inputLabel = useRef<HTMLLabelElement>(null);
@@ -24,28 +26,20 @@ const Dropdown = (props: DropdownProps) => {
 		setLabelWidth(inputLabel.current!.offsetWidth);
 	}, []);
 
-	let commitsShown: Array<string>;
-	const indexOfStart: number = commits.indexOf(showCommitsAfter);
-	if (indexOfStart < 0) {
-		commitsShown = commits;
-	} else {
-		commitsShown = commits.slice(indexOfStart + 1, commits.length);
-	}
-
 	return (
-		<FormControl variant='outlined' className='dropdown' disabled={!commitsShown.length}>
+		<FormControl variant='outlined' className={clsx('dropdown', className)} disabled={disabled}>
 			<InputLabel ref={inputLabel} id={label} className='label' margin='dense'>
 				{ label }
 			</InputLabel>
 			<Select
 				className='select'
-				value={selectedCommit}
-				onChange={(e) => setSelectedCommit(e.target.value)}
+				value={selectedValue}
+				onChange={(e) => setSelectedValue(e.target.value)}
 				margin='dense'
 				labelId={label}
 				labelWidth={labelWidth}
 			>
-				{ commitsShown.map((commit, i) => (<MenuItem key={commit + i} value={commit}>{ commit }</MenuItem>)) }
+				{ values.map((val, i) => (<MenuItem key={val + i} value={val}>{ val }</MenuItem>)) }
 			</Select>
 		</FormControl>
 	);
