@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import * as d3 from 'd3';
 import GraphData, { INode, IEdge } from '../../data/GraphData';
-import { calculateCurve } from './Util';
 
 const Visualization = () => {
 	const id = 'visualization';
