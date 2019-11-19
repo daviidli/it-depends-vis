@@ -1,16 +1,15 @@
 import IResponse from "./IResponse";
+import * as d3 from 'd3';
 
-export interface IEdge {
-	from: string,
-	to: string,
+export interface IEdge extends d3.SimulationLinkDatum<INode> {
+	source: INode,
+	target: INode,
 	weight: number
 }
 
-export interface INode {
+export interface INode extends d3.SimulationNodeDatum {
 	name: string,
-	size: number,
-	x?: number,
-	y?: number
+	size: number
 }
 
 export default class GraphData {
@@ -57,8 +56,8 @@ export default class GraphData {
 				}
 
 				edges.push({
-					from: this.nodes[i].name,
-					to: this.nodes[j].name,
+					source: this.nodes[i],
+					target: this.nodes[j],
 					weight: data[i][j]
 				});
 			}
