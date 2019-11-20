@@ -9,8 +9,7 @@ class Visualization extends React.Component {
 	private edges: IEdge[];
 	private persistedNodes: INode[];
 	private persistedEdges: IEdge[];
-	private labelNodes: Set<INode>;
-	private hoveredNode: INode | null = null;
+	private labelNodes: INode[];
 
 	private link: any;
 	private persistedLink: any;
@@ -45,7 +44,7 @@ class Visualization extends React.Component {
 		this.edges = [];
 		this.persistedNodes = [];
 		this.persistedEdges = [];
-		this.labelNodes = new Set();
+		this.labelNodes = this.nodes;
 	}
 
 	componentDidMount() {
@@ -66,7 +65,7 @@ class Visualization extends React.Component {
 			}) as any);
 
 		this.g = zoomContainer.append('g')
-			.attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
+			.attr('transform', 'translate(' + width / 2 + ',' + height * 0.4 + ')');
 
 		this.link = this.g.append('g')
 			.attr('stroke', '#000')
@@ -93,16 +92,16 @@ class Visualization extends React.Component {
 				.attr('viewBox', '0 -5 10 10')
 				.attr('refX', 0)
 				.attr('refY', 0)
-				.attr('markerWidth', 6)
-				.attr('markerHeight', 6)
+				.attr('markerWidth', 4)
+				.attr('markerHeight', 4)
 				.attr('orient', 'auto')
 			.append('path')
 				.attr('d', 'M0,-5L10,0L0,5')
-				.attr('fill', (type: string) => type);
+				.attr('fill', (type: string) => type)
 
 		this.simulation = d3.forceSimulation(this.nodes)
-			.force('charge', d3.forceManyBody().strength(-1000))
-			.force('link', d3.forceLink(this.edges).distance(200))
+			.force('charge', d3.forceManyBody().strength(-500))
+			.force('link', d3.forceLink(this.persistedEdges).distance((edge: IEdge) => 200 + (300 * (1 - edge.weight))))
 			.force('x', d3.forceX())
 			.force('y', d3.forceY())
 			.alphaTarget(1)
@@ -132,8 +131,6 @@ class Visualization extends React.Component {
 	}
 
 	private restart() {
-		this.labelNodes = this.getLabelNodes();
-
 		this.node = this.node.data(this.nodes, (node: INode) => node.name);
 		this.node.exit().remove();
 		this.node = this.node.enter().append('circle')
@@ -173,20 +170,19 @@ class Visualization extends React.Component {
 			.merge(this.label);
 
 		this.simulation.nodes(this.nodes);
+		this.simulation.force('link').links(this.persistedEdges);
 		this.simulation.alpha(1).restart();
 	}
 
 	private onMouseOver(node: INode) {
 		this.g.select('#' + node.id).attr('stroke', '#aaa').attr('stroke-width', 4);
 		this.edges = this.graphData.getEdgesFrom(node);
-		this.hoveredNode = node;
 		this.restart();
 	}
 
 	private onMouseOut(node: INode) {
 		this.g.select('#' + node.id).attr('stroke', null).attr('stroke-width', null);
 		this.edges = [];
-		this.hoveredNode = null;
 		this.restart();
 	}
 
@@ -239,7 +235,7 @@ class Visualization extends React.Component {
 
 	private calculateArrowOffset(this: any, edge: IEdge): string {
 		const pathLength = this.getTotalLength();
-		const markerLength = 5 * Math.sqrt(edge.weight * 10);
+		const markerLength = 4 * Math.sqrt(edge.weight * 10);
 		const markerSize = Math.sqrt(Math.pow(markerLength, 2) * 2);
 		const radius = (edge.target.size * 10) + markerSize;
 
@@ -249,21 +245,6 @@ class Visualization extends React.Component {
 		const dr = Math.sqrt(dx * dx + dy * dy);
 
 		return 'M' + edge.source.x + ',' + edge.source.y + 'A' + dr + ',' + dr + ' 0 0,1 ' + m.x + ',' + m.y;
-	}
-
-	private getLabelNodes(): Set<INode> {
-		const labels: Set<INode> = new Set();
-
-		if (this.hoveredNode !== null) {
-			labels.add(this.hoveredNode);
-		}
-
-		[...this.edges, ...this.persistedEdges].forEach((edge) => {
-			labels.add(edge.source);
-			labels.add(edge.target);
-		});
-
-		return labels;
 	}
 };
 
