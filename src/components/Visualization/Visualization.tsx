@@ -7,6 +7,17 @@ class Visualization extends React.Component {
 	private graphData: GraphData;
 	private nodes: INode[];
 	private edges: IEdge[];
+	private persistedNodes: INode[];
+	private persistedEdges: IEdge[];
+	private labelNodes: Set<INode>;
+	private hoveredNode: INode | null = null;
+
+	private link: any;
+	private persistedLink: any;
+	private node: any;
+	private label: any;
+	private simulation: any;
+	private g: any;
 
 	constructor(props: any) {
 		super(props);
@@ -29,18 +40,12 @@ class Visualization extends React.Component {
 			]
 		};
 
-		// const sampleResponse = {
-		// 	names: ['A', 'B'],
-		// 	size: [2, 4],
-		// 	data: [
-		// 		[1, 0.3],
-		// 		[0.6, 1]
-		// 	]
-		// }
-
 		this.graphData = new GraphData(sampleResponse);
 		this.nodes = this.graphData.getNodes();
-		this.edges = this.graphData.getEdges();
+		this.edges = [];
+		this.persistedNodes = [];
+		this.persistedEdges = [];
+		this.labelNodes = new Set();
 	}
 
 	componentDidMount() {
@@ -51,51 +56,29 @@ class Visualization extends React.Component {
 			.attr('width', width)
 			.attr('height', height);
 
-		const simulation = d3.forceSimulation(this.nodes)
-			.force('link', d3.forceLink(this.edges).id((edge: any) => edge.id).distance(200).strength(1))
-			.force('charge', d3.forceManyBody().strength((node: any) => node.size * -100))
-			.force('center', d3.forceCenter(width / 2, height / 2));
+		this.g = svg.append('g').attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
+		this.link = this.g.append('g')
+			.attr('stroke', '#000')
+			.attr('stroke-width', 1.5)
+			.selectAll('.link');
 
-		const link = svg.append('g')
-			.selectAll('path')
-			.data(this.edges)
-			.enter()
-			.insert('path')
-				.attr('class', (e: any) => 'src_' + e.source.name.replace(' ', '').replace('(', '').replace(')', '') + ' ' + 'tar_' + e.target.name.replace(' ', '').replace('(', '').replace(')', ''))
-				.attr('stroke', '#000')
-				.attr('stroke-width', (edge: any) => Math.sqrt(edge.weight * 10))
-				.attr('fill', 'none')
-				.attr('marker-end', function(d) { return 'url(#arrow)'; })
-				.attr('opacity', 0);
+		this.persistedLink = this.g.append('g')
+			.attr('stroke', '#000')
+			.attr('stroke-width', 1.5)
+			.selectAll('.pLink');
 
-		const node = svg.append('g')
-				.attr('stroke', '#fff')
-				.attr('stroke-width', 1.5)
-			.selectAll('circle')
-			.data(this.nodes)
-			.join('circle')
-				.on('click', function(d: any) {
-					const node = svg.select('.' + d.name.replace(' ', '').replace('(', '').replace(')', ''));
+		this.node = this.g.append('g')
+			.attr('stroke', '#fff')
+			.attr('stroke-width', 1.5)
+			.selectAll('.node');
 
-					let opacity = 0;
-					if (node.attr('active') !== '1') {
-						opacity = 1;
-					}
+		this.label = this.g.append('g')
+			.selectAll('.label');
 
-					svg.select('.' + d.name.replace(' ', '').replace('(', '').replace(')', ''))
-							.attr('active', opacity);
-					svg.selectAll('.src_' + d.name.replace(' ', '').replace('(', '').replace(')', ''))
-						.attr('opacity', opacity);
-				})
-				.attr('r', (d: any) => d.size * 10)
-				.attr('fill', '#fedcba')
-				.attr('class', (d: any) => d.name.replace(' ', '').replace('(', '').replace(')', ''))
-				.call(this.drag(simulation));
-
-		svg.append('defs').selectAll('marker')
-				.data(['arrow'])
+		this.g.append('defs').selectAll('marker')
+			.data(['#000', '#aaa'])
 			.enter().append('marker')
-				.attr('id', (type) => type)
+				.attr('id', (type: string) => type)
 				.attr('viewBox', '0 -5 10 10')
 				.attr('refX', 0)
 				.attr('refY', 0)
@@ -103,33 +86,18 @@ class Visualization extends React.Component {
 				.attr('markerHeight', 6)
 				.attr('orient', 'auto')
 			.append('path')
-				.attr('d', 'M0,-5L10,0L0,5');
+				.attr('d', 'M0,-5L10,0L0,5')
+				.attr('fill', (type: string) => type);
 
-		simulation.on('tick', () => {
-			link
-				.attr('d', (d: any) => {
-					const dx = d.target.x - d.source.x;
-					const dy = d.target.y - d.source.y;
-					const dr = Math.sqrt(dx * dx + dy * dy);
-					return 'M' + d.source.x + ',' + d.source.y + 'A' + dr + ',' + dr + ' 0 0,1 ' + d.target.x + ',' + d.target.y;
-				})
-				.attr('d', function(d: any) {
-					const pathLength = this.getTotalLength();
-					const markerLength = 5 * Math.sqrt(d.weight * 10);
-					const markerSize = Math.sqrt(Math.pow(markerLength, 2) * 2);
-					const radius = (d.target.size * 10) + markerSize;
+		this.simulation = d3.forceSimulation(this.nodes)
+			.force('charge', d3.forceManyBody().strength(-1000))
+			.force('link', d3.forceLink(this.edges).distance(200))
+			.force('x', d3.forceX())
+			.force('y', d3.forceY())
+			.alphaTarget(1)
+			.on('tick', this.tick.bind(this));
 
-					const m = this.getPointAtLength(pathLength - radius);
-					const dx = m.x - d.source.x;
-					const dy = m.y - d.source.y;
-					const dr = Math.sqrt(dx * dx + dy * dy);
-
-					return 'M' + d.source.x + ',' + d.source.y + 'A' + dr + ',' + dr + ' 0 0,1 ' + m.x + ',' + m.y;
-				});
-			node
-				.attr('cx', (node: any) => node.x)
-				.attr('cy', (node: any) => node.y);
-		});
+		this.restart();
 	}
 
 	render() {
@@ -138,22 +106,111 @@ class Visualization extends React.Component {
 		);
 	}
 
+	private tick() {
+		this.node
+			.attr('cx', (node: INode) => node.x)
+			.attr('cy', (node: INode) => node.y);
+		this.link
+			.attr('d', this.calculateCurvedPath)
+			.attr('d', this.calculateArrowOffset);
+		this.persistedLink
+			.attr('d', this.calculateCurvedPath)
+			.attr('d', this.calculateArrowOffset);
+		this.label
+			.attr('transform', (node: INode) => 'translate(' + node.x + ',' + node.y + ')');
+	}
+
+	private restart() {
+		this.labelNodes = this.getLabelNodes();
+
+		this.node = this.node.data(this.nodes, (node: INode) => node.name);
+		this.node.exit().remove();
+		this.node = this.node.enter().append('circle')
+			.on('mouseover', this.onMouseOver.bind(this))
+			.on('mouseout', this.onMouseOut.bind(this))
+			.on('click', this.onClick.bind(this))
+			.attr('id', (node: INode) => node.id)
+			.attr('r', (node: INode) => node.size * 10)
+			.attr('fill', '#fedcba')
+			.call(this.drag(this.simulation))
+			.merge(this.node);
+		
+		this.link = this.link.data(this.edges, (d: IEdge) => d.source.name + '-' + d.target.name);
+		this.link.exit().remove();
+		this.link = this.link.enter().append('path')
+			.attr('stroke', '#aaa')
+			.attr('stroke-width', (edge: IEdge) => Math.sqrt(edge.weight) * 4)
+			.attr('fill', 'none')
+			.attr('marker-end', () => 'url(##aaa)')
+			.merge(this.link);
+
+		this.persistedLink = this.persistedLink.data(this.persistedEdges, (d: IEdge) => d.source.name + '-' + d.target.name);
+		this.persistedLink.exit().remove();
+		this.persistedLink = this.persistedLink.enter().append('path')
+			.attr('stroke', '#000')
+			.attr('stroke-width', (edge: IEdge) => Math.sqrt(edge.weight) * 4)
+			.attr('fill', 'none')
+			.attr('marker-end', () => 'url(##000)')
+			.merge(this.persistedLink);
+
+		this.label = this.label.data(Array.from(this.labelNodes), (node: INode) => node.id);
+		this.label.exit().remove();
+		this.label = this.label.enter().append('text')
+			.attr('x', (node: INode) => -1 * node.name.length / 4 + 1 + 'em')
+			.attr('y', (node: INode) => node.size * 10 + 20)
+			.text((node: INode) => node.name)
+			.merge(this.label);
+
+		this.simulation.nodes(this.nodes);
+		this.simulation.alpha(1).restart();
+	}
+
+	private onMouseOver(node: INode) {
+		this.g.select('#' + node.id).attr('stroke', '#aaa').attr('stroke-width', 4);
+		this.edges = this.graphData.getEdgesFrom(node);
+		this.hoveredNode = node;
+		this.restart();
+	}
+
+	private onMouseOut(node: INode) {
+		this.g.select('#' + node.id).attr('stroke', null).attr('stroke-width', null);
+		this.edges = [];
+		this.hoveredNode = null;
+		this.restart();
+	}
+
+	private onClick(node: INode) {
+		const index = this.persistedNodes.indexOf(node);
+		const edgesFromNode = this.graphData.getEdgesFrom(node);
+		if (index < 0) {
+			this.persistedNodes.push(node);
+			this.persistedEdges.push(...edgesFromNode);
+		} else {
+			this.persistedNodes.splice(index, 1);
+			this.persistedEdges = this.persistedEdges.filter((edge) => edgesFromNode.indexOf(edge) < 0);
+		}
+		
+		this.restart();
+	}
+
 	private drag(simulation: any): any {
-		const onDragStart = (d: any) => {
-			if (!d3.event.active) simulation.alphaTarget(0.3).restart();
-			d.fx = d.x;
-			d.fy = d.y;
+		const onDragStart = (node: any) => {
+			if (!d3.event.active) {
+				simulation.alphaTarget(0.3).restart();
+			}
+			node.fx = node.x;
+			node.fy = node.y;
 		}
 
-		const onDrag = (d: any) => {
-			d.fx = d3.event.x;
-			d.fy = d3.event.y;
+		const onDrag = (node: any) => {
+			node.fx = d3.event.x;
+			node.fy = d3.event.y;
 		}
 
-		const onDragEnd = (d: any) => {
+		const onDragEnd = (node: any) => {
 			if (!d3.event.active) simulation.alphaTarget(0);
-			d.fx = null;
-			d.fy = null;
+			node.fx = null;
+			node.fy = null;
 		}
 
 		return d3.drag()
@@ -161,6 +218,42 @@ class Visualization extends React.Component {
 			.on('drag', onDrag)
 			.on('end', onDragEnd);
 	};
+
+	private calculateCurvedPath(edge: IEdge): string {
+		const dx = edge.target.x - edge.source.x;
+		const dy = edge.target.y - edge.source.y;
+		const dr = Math.sqrt(dx * dx + dy * dy);
+		return 'M' + edge.source.x + ',' + edge.source.y + 'A' + dr + ',' + dr + ' 0 0,1 ' + edge.target.x + ',' + edge.target.y;
+	}
+
+	private calculateArrowOffset(this: any, edge: IEdge): string {
+		const pathLength = this.getTotalLength();
+		const markerLength = 5 * Math.sqrt(edge.weight * 10);
+		const markerSize = Math.sqrt(Math.pow(markerLength, 2) * 2);
+		const radius = (edge.target.size * 10) + markerSize;
+
+		const m = this.getPointAtLength(pathLength - radius);
+		const dx = m.x - edge.source.x;
+		const dy = m.y - edge.source.y;
+		const dr = Math.sqrt(dx * dx + dy * dy);
+
+		return 'M' + edge.source.x + ',' + edge.source.y + 'A' + dr + ',' + dr + ' 0 0,1 ' + m.x + ',' + m.y;
+	}
+
+	private getLabelNodes(): Set<INode> {
+		const labels: Set<INode> = new Set();
+
+		if (this.hoveredNode !== null) {
+			labels.add(this.hoveredNode);
+		}
+
+		[...this.edges, ...this.persistedEdges].forEach((edge) => {
+			labels.add(edge.source);
+			labels.add(edge.target);
+		});
+
+		return labels;
+	}
 };
 
 export default Visualization;

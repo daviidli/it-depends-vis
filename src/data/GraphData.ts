@@ -9,14 +9,19 @@ export interface IEdge extends d3.SimulationLinkDatum<INode> {
 
 export interface INode extends d3.SimulationNodeDatum {
 	name: string,
-	size: number
+	id: string,
+	size: number,
+	x: number,
+	y: number
 }
 
 export default class GraphData {
 	private nodes: INode[];
 	private edges: IEdge[];
+	private data: number[][];
 
 	constructor(response: IResponse) {
+		this.data = response.data;
 		this.nodes = this.parseNodes(response.names, response.size);
 		this.edges = this.parseEdges(response.data);
 	}
@@ -29,6 +34,25 @@ export default class GraphData {
 		return this.edges;
 	}
 
+	public getEdgesFrom(node: INode) {
+		// const edges: IEdge[] = [];
+
+		// const indexOfNode = this.nodes.indexOf(node);
+		// if (indexOfNode < 0) {
+		// 	return [];
+		// }
+
+		// for (let i = 0; i < this.data[indexOfNode].length; i++) {
+		// 	if (i === indexOfNode) {
+		// 		continue;
+		// 	}
+
+		// 	if ()
+		// }
+
+		return this.edges.filter((edge) => edge.source === node);
+	}
+
 	private parseNodes(names: string[], sizes: number[]): INode[] {
 		const nodes: INode[] = [];
 
@@ -38,8 +62,11 @@ export default class GraphData {
 
 		for (let i = 0; i < names.length; i++) {
 			nodes.push({
+				id: this.cleanName(names[i]),
 				name: names[i],
-				size: sizes[i]
+				size: sizes[i],
+				x: 0,
+				y: 0
 			});
 		}
 
@@ -64,5 +91,10 @@ export default class GraphData {
 		}
 
 		return edges;
+	}
+
+	private cleanName(name: string): string {
+		return name.replace(' ', '').replace('(', '').replace(')', '');
+		// TODO: make this more robust
 	}
 }
