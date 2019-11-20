@@ -55,8 +55,19 @@ class Visualization extends React.Component {
 		const svg = d3.select('#' + this.id)
 			.attr('width', width)
 			.attr('height', height);
+		
+		const zoomContainer = svg.append('g');
+		
+		svg.call(d3.zoom()
+			.extent([[0, 0], [width, height]])
+			.scaleExtent([0.25, 4])
+			.on("zoom", () => {
+				zoomContainer.attr('transform', d3.event.transform);
+			}) as any);
 
-		this.g = svg.append('g').attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
+		this.g = zoomContainer.append('g')
+			.attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
+
 		this.link = this.g.append('g')
 			.attr('stroke', '#000')
 			.attr('stroke-width', 1.5)
