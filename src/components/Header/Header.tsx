@@ -6,44 +6,33 @@ import IconButton from '@material-ui/core/IconButton';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import CommitDropdown from './CommitDropdown';
 import { HelpModalContext } from '../Modal/HelpModalContext';
+import { ISettings } from '../../App';
+import { SettingsContext, DataContext } from '../../AppContext';
 
 import './Header.scss';
 
 const Header = () => {
 	const [repo, setRepo] = useState('');
-	const [commits, setCommits] = useState([] as string[]);
-	const [selectedCommits, setSelectedCommits] = useState({ start: '', end: '' });
 	const setOpen: Function = useContext(HelpModalContext)[1];
+	const [settings, setSettings] = useContext(SettingsContext);
+	const [data] = useContext(DataContext);
 
-	const sendRequest = () => {
-		// TODO
-		console.log(repo);
-		setCommits([
-			'commit #1',
-			'commit #2',
-			'commit #3',
-			'commit #4',
-			'commit #5',
-			'commit #6',
-			'commit #7',
-			'commit #8',
-			'commit #9',
-			'commit #10'
-		]);
+	const saveRepo = () => {
+		setSettings((prev: ISettings) => ({...prev, repository: repo}));
 	};
 
 	const handleKeyDown = (e: any) => {
 		if (e.key === 'Enter') {
-			sendRequest();
+			saveRepo();
 		}
 	};
 
 	const setStartCommit = (commit: string) => {
-		setSelectedCommits(prev => ({ ...prev, start: commit }));
+		setSettings((prev: ISettings) => ({...prev, startCommit: commit}));
 	};
 
 	const setEndCommit = (commit: string) => {
-		setSelectedCommits(prev => ({ ...prev, end: commit }));
+		setSettings((prev: ISettings) => ({...prev, endCommit: commit}));
 	};
 
 	const showHelp = () => {
@@ -81,7 +70,7 @@ const Header = () => {
 						id='repoSend'
 						variant='contained'
 						color='secondary'
-						onClick={() => sendRequest()}
+						onClick={() => saveRepo()}
 					>
 						>
 					</Button>
@@ -90,19 +79,19 @@ const Header = () => {
 				<Grid item xs={6} sm={6} md={2}>
 					<CommitDropdown
 						label='Start Commit'
-						selectedCommit={selectedCommits.start}
+						selectedCommit={settings.startCommit}
 						showCommitsAfter={''}
 						setSelectedCommit={setStartCommit}
-						commits={commits}
+						commits={data.commits}
 					/>
 				</Grid>
 				<Grid item xs={6} sm={6} md={2}>
 					<CommitDropdown
 						label='End Commit'
-						selectedCommit={selectedCommits.end}
-						showCommitsAfter={selectedCommits.start}
+						selectedCommit={settings.endCommit}
+						showCommitsAfter={settings.startCommit}
 						setSelectedCommit={setEndCommit}
-						commits={commits}
+						commits={data.commits}
 					/>
 				</Grid>
 			</Grid>
