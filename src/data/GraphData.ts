@@ -35,21 +35,6 @@ export default class GraphData {
 	}
 
 	public getEdgesFrom(node: INode) {
-		// const edges: IEdge[] = [];
-
-		// const indexOfNode = this.nodes.indexOf(node);
-		// if (indexOfNode < 0) {
-		// 	return [];
-		// }
-
-		// for (let i = 0; i < this.data[indexOfNode].length; i++) {
-		// 	if (i === indexOfNode) {
-		// 		continue;
-		// 	}
-
-		// 	if ()
-		// }
-
 		return this.edges.filter((edge) => edge.source === node);
 	}
 
@@ -83,8 +68,8 @@ export default class GraphData {
 				}
 
 				edges.push({
-					source: this.nodes[i],
-					target: this.nodes[j],
+					source: this.nodes[j],
+					target: this.nodes[i],
 					weight: data[i][j]
 				});
 			}

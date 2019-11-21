@@ -1,15 +1,25 @@
 import React from 'react';
 import * as d3 from 'd3';
 import GraphData, { INode, IEdge } from '../../data/GraphData';
+import IResponse from '../../data/IResponse';
 
-class Visualization extends React.Component {
+interface VisualizationProps {
+	percentageLow: number,
+	percentageHigh: number,
+	graphData: GraphData
+};
+
+interface VisualizationState {
+	mounted: boolean
+};
+
+class Visualization extends React.Component<VisualizationProps, VisualizationState> {
 	private id: string;
 	private graphData: GraphData;
-	private nodes: INode[];
-	private edges: IEdge[];
-	private persistedNodes: INode[];
-	private persistedEdges: IEdge[];
-	private labelNodes: INode[];
+	private nodes: INode[] = [];
+	private edges: IEdge[] = [];
+	private persistedNodes: INode[] = [];
+	private persistedEdges: IEdge[] = [];
 
 	private link: any;
 	private persistedLink: any;
@@ -20,34 +30,48 @@ class Visualization extends React.Component {
 
 	constructor(props: any) {
 		super(props);
+
 		this.id = 'visualization';
-
-		const sampleResponse = {
-			names: ['constructor (A)', 'main (A)', 'receiveInput (A)', 'constructor (B)', 'doSomething (B)', 'doSomethingElse (B)', 'constructor (C1)', 'foo (C1)', 'constructor (C2)', 'barbar (C2)'],
-			size: [1,1,6,2,4,1,1,2,1,1],
-			data: [
-				[1,1,0.166666667,0.5,0.25,0,0,0,0,0],
-				[1,1,0.166666667,0.5,0.25,0,0,0,0,0],
-				[1,1,1,1,0.75,1,1,1,1,0],
-				[1,1,0.333333333,1,0.25,1,0,0,0,0],
-				[1,1,0.5,0.5,1,0,0,0.5,0,0],
-				[0,0,0.166666667,0.5,0,1,0,0,0,0],
-				[0,0,0.166666667,0,0,0,1,0.5,1,0],
-				[0,0,0.333333333,0,0.25,0,1,1,1,0],
-				[0,0,0.166666667,0,0,0,1,0.5,1,0],
-				[0,0,0,0,0,0,0,0,0,1]
-			]
-		};
-
-		this.graphData = new GraphData(sampleResponse);
+		this.graphData = this.props.graphData;
 		this.nodes = this.graphData.getNodes();
-		this.edges = [];
-		this.persistedNodes = [];
-		this.persistedEdges = [];
-		this.labelNodes = this.nodes;
+		this.state = {
+			mounted: false
+		};
+	}
+	
+	componentDidUpdate() {
+		this.graphData = this.props.graphData;
+		this.nodes = this.graphData.getNodes();
+
+		if (this.state.mounted) {
+			this.restart();
+		}
 	}
 
 	componentDidMount() {
+		this.setState({ mounted: true });
+		this.startD3Graph();
+	}
+
+	componentWillUnmount() {
+		this.nodes = [];
+		this.edges = [];
+		this.persistedEdges = [];
+		this.persistedNodes = [];
+		this.restart();
+	}
+
+	render() {
+		if (this.state.mounted) {
+			this.restart();
+		}
+		
+		return (
+			<svg id={this.id}></svg>
+		);
+	}
+
+	private startD3Graph() {
 		const width = window.innerWidth;
 		const height = window.innerHeight;	
 	
@@ -101,19 +125,14 @@ class Visualization extends React.Component {
 
 		this.simulation = d3.forceSimulation(this.nodes)
 			.force('charge', d3.forceManyBody().strength(-500))
-			.force('link', d3.forceLink(this.persistedEdges).distance((edge: IEdge) => 200 + (300 * (1 - edge.weight))))
+			.force('link', d3.forceLink(this.persistedEdges).distance(300).strength(0.1))
 			.force('x', d3.forceX())
 			.force('y', d3.forceY())
 			.alphaTarget(1)
+			.velocityDecay(0.6)
 			.on('tick', this.tick.bind(this));
 
 		this.restart();
-	}
-
-	render() {
-		return (
-			<svg id={this.id}></svg>
-		);
 	}
 
 	private tick() {
@@ -131,6 +150,9 @@ class Visualization extends React.Component {
 	}
 
 	private restart() {
+		const filteredEdges = this.edges.filter(this.isWithinRange.bind(this));
+		const filteredPersistedEdges = this.persistedEdges.filter(this.isWithinRange.bind(this))
+
 		this.node = this.node.data(this.nodes, (node: INode) => node.name);
 		this.node.exit().remove();
 		this.node = this.node.enter().append('circle')
@@ -143,7 +165,7 @@ class Visualization extends React.Component {
 			.call(this.drag(this.simulation))
 			.merge(this.node);
 		
-		this.link = this.link.data(this.edges, (d: IEdge) => d.source.name + '-' + d.target.name);
+		this.link = this.link.data(filteredEdges, (d: IEdge) => d.source.name + '-' + d.target.name);
 		this.link.exit().remove();
 		this.link = this.link.enter().append('path')
 			.attr('stroke', '#aaa')
@@ -152,7 +174,7 @@ class Visualization extends React.Component {
 			.attr('marker-end', () => 'url(##aaa)')
 			.merge(this.link);
 
-		this.persistedLink = this.persistedLink.data(this.persistedEdges, (d: IEdge) => d.source.name + '-' + d.target.name);
+		this.persistedLink = this.persistedLink.data(filteredPersistedEdges, (d: IEdge) => d.source.name + '-' + d.target.name);
 		this.persistedLink.exit().remove();
 		this.persistedLink = this.persistedLink.enter().append('path')
 			.attr('stroke', '#000')
@@ -161,7 +183,7 @@ class Visualization extends React.Component {
 			.attr('marker-end', () => 'url(##000)')
 			.merge(this.persistedLink);
 
-		this.label = this.label.data(Array.from(this.labelNodes), (node: INode) => node.id);
+		this.label = this.label.data(this.nodes, (node: INode) => node.id);
 		this.label.exit().remove();
 		this.label = this.label.enter().append('text')
 			.attr('x', (node: INode) => -1 * node.name.length / 4 + 1 + 'em')
@@ -170,7 +192,7 @@ class Visualization extends React.Component {
 			.merge(this.label);
 
 		this.simulation.nodes(this.nodes);
-		this.simulation.force('link').links(this.persistedEdges);
+		this.simulation.force('link').links(filteredPersistedEdges);
 		this.simulation.alpha(1).restart();
 	}
 
@@ -245,6 +267,10 @@ class Visualization extends React.Component {
 		const dr = Math.sqrt(dx * dx + dy * dy);
 
 		return 'M' + edge.source.x + ',' + edge.source.y + 'A' + dr + ',' + dr + ' 0 0,1 ' + m.x + ',' + m.y;
+	}
+
+	private isWithinRange(edge: IEdge) {
+		return edge.weight >= this.props.percentageLow && edge.weight <= this.props.percentageHigh;
 	}
 };
 
