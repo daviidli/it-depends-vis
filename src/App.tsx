@@ -90,11 +90,6 @@ const App = () => {
 					<HelpModal />
 					<Header />
 				</HelpModalContextProvider>
-				<Visualization
-					percentageLow={data.percentageLow/100}
-					percentageHigh={data.percentageHigh/100}
-					graphData={graphData}
-				/>
 				<Footer />
 			</SettingsContext.Provider>
 		</DataContext.Provider>
