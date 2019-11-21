@@ -1,16 +1,28 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Slider from '@material-ui/core/Slider';
 import Dropdown from '../Dropdown/Dropdown';
 import clsx from 'clsx';
+import { ISettings, IData } from '../../App';
+import { SettingsContext, DataContext } from '../../AppContext';
+import { Granularity } from '../../data/GranularityEnum';
 
 import './Footer.scss';
 
 const Footer = () => {
-	const [selectedType, setType] = useState<string>('');
-	const [value, setValue] = useState<number[]>([0, 100]);
+	const [settings, setSettings] = useContext(SettingsContext);
+	const [data, setData] = useContext(DataContext);
 
-	const types: Array<string> = ['Files', 'Classes', 'Functions'];
+	const setType = (type: string) => {
+		setSettings((prev: ISettings) => ({...prev, granularity: type}));
+	}
+
+	const setSlider = (e: any, val: number | number[]) => {
+		const range = val as number[];
+		setData((prev: IData) => ({...prev, percentageLow: range[0], percentageHigh: range[1]}));
+	}
+
+	const types: string[] = Object.values(Granularity);
 	const isWide: boolean = window.innerWidth > 550;
 
 	return (
@@ -23,7 +35,7 @@ const Footer = () => {
 			<Grid item xs={12} sm={5}>
 				<Dropdown
 					className={clsx({ wide: isWide })}
-					selectedValue={selectedType}
+					selectedValue={settings.granularity}
 					label='Granularity'
 					disabled={false}
 					setSelectedValue={setType}
@@ -35,11 +47,11 @@ const Footer = () => {
 				<div className='sliderLabel'>Percentage Range</div>
 				<Slider
 					className={clsx('slider', { wide: isWide })}
-					value={value}
-					onChange={(e: any, newVal: number | number[]) => setValue(newVal as number[])}
+					value={[data.percentageLow, data.percentageHigh]}
+					onChange={setSlider}
 					valueLabelDisplay='auto'
 					aria-labelledby='range-slider'
-					getAriaValueText={() => value[0] + '-' + value[1]}
+					getAriaValueText={() => data.percentageLow + '-' + data.percentageHigh}
 				/>
 			</Grid>
 		</Grid>
