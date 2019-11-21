@@ -1,7 +1,6 @@
 import React from 'react';
 import * as d3 from 'd3';
 import GraphData, { INode, IEdge } from '../../data/GraphData';
-import IResponse from '../../data/IResponse';
 
 interface VisualizationProps {
 	percentageLow: number,
@@ -25,6 +24,7 @@ class Visualization extends React.Component<VisualizationProps, VisualizationSta
 	private persistedLink: any;
 	private node: any;
 	private label: any;
+	private percentages: any;
 	private simulation: any;
 	private g: any;
 
@@ -38,10 +38,23 @@ class Visualization extends React.Component<VisualizationProps, VisualizationSta
 			mounted: false
 		};
 	}
+
+	shouldComponentUpdate(nextProps: VisualizationProps) {
+		if (nextProps.graphData !== this.props.graphData) {
+			return true;
+		} else {
+			if (this.state.mounted) {
+				this.restart();
+			}
+			return false;
+		}
+	}
 	
 	componentDidUpdate() {
 		this.graphData = this.props.graphData;
 		this.nodes = this.graphData.getNodes();
+		this.edges = [];
+		this.persistedEdges = [];
 
 		if (this.state.mounted) {
 			this.restart();
@@ -51,14 +64,6 @@ class Visualization extends React.Component<VisualizationProps, VisualizationSta
 	componentDidMount() {
 		this.setState({ mounted: true });
 		this.startD3Graph();
-	}
-
-	componentWillUnmount() {
-		this.nodes = [];
-		this.edges = [];
-		this.persistedEdges = [];
-		this.persistedNodes = [];
-		this.restart();
 	}
 
 	render() {
@@ -84,7 +89,7 @@ class Visualization extends React.Component<VisualizationProps, VisualizationSta
 		svg.call(d3.zoom()
 			.extent([[0, 0], [width, height]])
 			.scaleExtent([0.25, 4])
-			.on("zoom", () => {
+			.on('zoom', () => {
 				zoomContainer.attr('transform', d3.event.transform);
 			}) as any);
 
@@ -93,24 +98,28 @@ class Visualization extends React.Component<VisualizationProps, VisualizationSta
 
 		this.link = this.g.append('g')
 			.attr('stroke', '#000')
-			.attr('stroke-width', 1.5)
+			.attr('stroke-width', 1)
 			.selectAll('.link');
 
 		this.persistedLink = this.g.append('g')
 			.attr('stroke', '#000')
-			.attr('stroke-width', 1.5)
+			.attr('stroke-width', 1)
 			.selectAll('.pLink');
 
 		this.node = this.g.append('g')
-			.attr('stroke', '#fff')
-			.attr('stroke-width', 1.5)
+			.attr('stroke', '#000')
+			.attr('stroke-width', 4)
 			.selectAll('.node');
+
+		this.percentages = this.g.append('text')
+			.attr('dy', -5)
+			.selectAll('.percentages');
 
 		this.label = this.g.append('g')
 			.selectAll('.label');
 
 		this.g.append('defs').selectAll('marker')
-			.data(['#000', '#aaa'])
+			.data(['#000', '#e74c3c'])
 			.enter().append('marker')
 				.attr('id', (type: string) => type)
 				.attr('viewBox', '0 -5 10 10')
@@ -124,12 +133,11 @@ class Visualization extends React.Component<VisualizationProps, VisualizationSta
 				.attr('fill', (type: string) => type)
 
 		this.simulation = d3.forceSimulation(this.nodes)
-			.force('charge', d3.forceManyBody().strength(-500))
-			.force('link', d3.forceLink(this.persistedEdges).distance(300).strength(0.1))
-			.force('x', d3.forceX())
-			.force('y', d3.forceY())
+			.force('charge', d3.forceManyBody().strength(-1000))
+			.force('link', d3.forceLink(this.persistedEdges).distance(400).strength(0.05))
+			.force('x', d3.forceX().strength(0.1))
+			.force('y', d3.forceY().strength(0.1))
 			.alphaTarget(1)
-			.velocityDecay(0.6)
 			.on('tick', this.tick.bind(this));
 
 		this.restart();
@@ -151,7 +159,7 @@ class Visualization extends React.Component<VisualizationProps, VisualizationSta
 
 	private restart() {
 		const filteredEdges = this.edges.filter(this.isWithinRange.bind(this));
-		const filteredPersistedEdges = this.persistedEdges.filter(this.isWithinRange.bind(this))
+		const filteredPersistedEdges = this.persistedEdges.filter(this.isWithinRange.bind(this));
 
 		this.node = this.node.data(this.nodes, (node: INode) => node.name);
 		this.node.exit().remove();
@@ -160,34 +168,47 @@ class Visualization extends React.Component<VisualizationProps, VisualizationSta
 			.on('mouseout', this.onMouseOut.bind(this))
 			.on('click', this.onClick.bind(this))
 			.attr('id', (node: INode) => node.id)
-			.attr('r', (node: INode) => node.size * 10)
-			.attr('fill', '#fedcba')
+			.attr('r', this.getRadius)
+			.attr('fill', '#2c3e50')
 			.call(this.drag(this.simulation))
 			.merge(this.node);
 		
-		this.link = this.link.data(filteredEdges, (d: IEdge) => d.source.name + '-' + d.target.name);
+		this.link = this.link
+			.data(filteredEdges, this.getEdgeId);
 		this.link.exit().remove();
 		this.link = this.link.enter().append('path')
-			.attr('stroke', '#aaa')
-			.attr('stroke-width', (edge: IEdge) => Math.sqrt(edge.weight) * 4)
+			.attr('stroke', '#e74c3c')
+			.attr('stroke-width', this.getEdgeWeight)
 			.attr('fill', 'none')
-			.attr('marker-end', () => 'url(##aaa)')
+			.attr('id', this.getEdgeId)
+			.attr('marker-end', () => 'url(##e74c3c)')
 			.merge(this.link);
 
-		this.persistedLink = this.persistedLink.data(filteredPersistedEdges, (d: IEdge) => d.source.name + '-' + d.target.name);
+		this.persistedLink = this.persistedLink
+			.data(filteredPersistedEdges, this.getEdgeId);
 		this.persistedLink.exit().remove();
 		this.persistedLink = this.persistedLink.enter().append('path')
 			.attr('stroke', '#000')
-			.attr('stroke-width', (edge: IEdge) => Math.sqrt(edge.weight) * 4)
+			.attr('stroke-width', this.getEdgeWeight)
 			.attr('fill', 'none')
+			.attr('id', this.getEdgeId)
 			.attr('marker-end', () => 'url(##000)')
 			.merge(this.persistedLink);
+
+		this.percentages = this.percentages
+			.data([...filteredEdges, ...filteredPersistedEdges], this.getEdgeId);
+		this.percentages.exit().remove();
+		this.percentages = this.percentages.enter().append('textPath')
+			.attr('xlink:href', (edge: IEdge) => '#' + this.getEdgeId(edge))
+			.attr('startOffset', '50%')
+			.text((edge: IEdge) => edge.weight * 100 + '%')
+			.merge(this.percentages);
 
 		this.label = this.label.data(this.nodes, (node: INode) => node.id);
 		this.label.exit().remove();
 		this.label = this.label.enter().append('text')
 			.attr('x', (node: INode) => -1 * node.name.length / 4 + 1 + 'em')
-			.attr('y', (node: INode) => node.size * 10 + 20)
+			.attr('y', (node: INode) => this.getRadius(node) + 20)
 			.text((node: INode) => node.name)
 			.merge(this.label);
 
@@ -271,6 +292,18 @@ class Visualization extends React.Component<VisualizationProps, VisualizationSta
 
 	private isWithinRange(edge: IEdge) {
 		return edge.weight >= this.props.percentageLow && edge.weight <= this.props.percentageHigh;
+	}
+
+	private getRadius(node: INode): number {
+		return node.size * 10;
+	}
+
+	private getEdgeId(edge: IEdge): string {
+		return edge.source.id + '-' + edge.target.id;
+	}
+
+	private getEdgeWeight(edge: IEdge): number {
+		return Math.pow(edge.weight, 1.5) * 6
 	}
 };
 

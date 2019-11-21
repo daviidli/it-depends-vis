@@ -70,7 +70,7 @@ export default class GraphData {
 				edges.push({
 					source: this.nodes[j],
 					target: this.nodes[i],
-					weight: data[i][j]
+					weight: Math.round(data[i][j] * 100) / 100
 				});
 			}
 		}
