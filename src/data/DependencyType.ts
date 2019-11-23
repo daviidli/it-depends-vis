@@ -3,8 +3,8 @@ export enum DependencyType {
 	INHERITANCE = 'inheritance',
 	IMPLEMENTATION = 'implementation',
 	DEPENDENCY = 'dependency',
-	AGGREGATION = 'aggregation',
-	COMPOSITION = 'composition',
+	// AGGREGATION = 'aggregation',
+	// COMPOSITION = 'composition',
 	REFERENCES = 'references',
 	CALLS = 'calls'
 };

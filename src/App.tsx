@@ -77,8 +77,8 @@ const App = () => {
 				data: [
 					[[], [], [DependencyType.DEPENDENCY], [], []],
 					[[], [], [DependencyType.ASSOCIATION], [], []],
-					[[], [], [], [], [DependencyType.COMPOSITION]],
-					[[DependencyType.AGGREGATION, DependencyType.IMPLEMENTATION], [], [], [], []],
+					[[], [], [], [], [DependencyType.DEPENDENCY]],
+					[[DependencyType.CALLS], [], [], [], []],
 					[[], [], [], [DependencyType.INHERITANCE], []],
 				]
 			}

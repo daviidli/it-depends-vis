@@ -50,7 +50,7 @@ export default class GraphData {
 			nodes.push({
 				id: this.cleanName(names[i]),
 				name: names[i],
-				size: sizes ? sizes[i] : 1,
+				size: sizes ? sizes[i] : 2,
 				x: 0,
 				y: 0
 			});
@@ -84,14 +84,25 @@ export default class GraphData {
 				} else {
 					const depTypes: DependencyType[] = data[i][j] as DependencyType[];
 					
-					depTypes.forEach((type) => {
+					// TODO currently only takes the first dependency type as the vis can't show more than one right now
+
+					// depTypes.forEach((type) => {
+					// 	edges.push({
+					// 		source: this.nodes[j],
+					// 		target: this.nodes[i],
+					// 		weight: 0.8,
+					// 		type: type
+					// 	});
+					// });
+
+					if (depTypes.length) {
 						edges.push({
 							source: this.nodes[j],
 							target: this.nodes[i],
-							weight: 0.8,
-							type: type
+							weight: 1,
+							type: depTypes[0]
 						});
-					});
+					}
 				}
 			}
 		}

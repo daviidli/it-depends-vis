@@ -14,6 +14,7 @@ interface IMarker {
 	refY: number,
 	width: number,
 	height: number
+	color?: string
 };
 
 interface VisualizationProps {
@@ -43,6 +44,13 @@ class Visualization extends React.Component<VisualizationProps, VisualizationSta
 	private simulation: any;
 	private g: any;
 
+	private readonly colors = {
+		hover: '#e74c3c',
+		persisted: '#000',
+		node: '#2c3e50',
+		nodeHover: '#aaa'
+	};
+
 	private readonly markers : IMarker[] = [
 		{
 			name: Graph.CROSSCUT,
@@ -59,8 +67,8 @@ class Visualization extends React.Component<VisualizationProps, VisualizationSta
 			viewBox: '0 0 10 10',
 			refX: 0,
 			refY: 5,
-			width: 4,
-			height: 4
+			width: 3,
+			height: 3
 		},
 		{
 			name: DependencyType.IMPLEMENTATION,
@@ -68,26 +76,8 @@ class Visualization extends React.Component<VisualizationProps, VisualizationSta
 			viewBox: '0 0 10 10',
 			refX: 0,
 			refY: 5,
-			width: 4,
-			height: 4
-		},
-		{
-			name: DependencyType.AGGREGATION,
-			path: 'M-1 5 7.5 0 16 5 7.5 10Z M1.3 5 7.5 8.7 14 5 7.5 1.3Z',
-			viewBox: '0 0 16 10',
-			refX: 8,
-			refY: 5,
-			width: 6,
-			height: 4
-		},
-		{
-			name: DependencyType.COMPOSITION,
-			path: 'M-1 5 7.5 0 16 5 7.5 10Z',
-			viewBox: '0 0 16 10',
-			refX: 8,
-			refY: 5,
-			width: 6,
-			height: 4
+			width: 3,
+			height: 3
 		},
 		{
 			name: DependencyType.ASSOCIATION,
@@ -95,8 +85,8 @@ class Visualization extends React.Component<VisualizationProps, VisualizationSta
 			viewBox: '0 0 12 12',
 			refX: 6,
 			refY: 6,
-			width: 10,
-			height: 10
+			width: 6,
+			height: 6
 		},
 		{
 			name: DependencyType.DEPENDENCY,
@@ -104,8 +94,8 @@ class Visualization extends React.Component<VisualizationProps, VisualizationSta
 			viewBox: '0 0 16 10',
 			refX: 6,
 			refY: 6,
-			width: 10,
-			height: 10
+			width: 6,
+			height: 6
 		},
 		{
 			name: DependencyType.REFERENCES,
@@ -213,10 +203,19 @@ class Visualization extends React.Component<VisualizationProps, VisualizationSta
 		this.label = this.g.append('g')
 			.selectAll('.label');
 
+		const markers = [...this.markers.map((marker) => {
+			marker.color = this.colors.hover;
+			return marker;
+		}), ...this.markers.map((marker) => {
+			const newMarker = Object.create(marker);
+			newMarker.color = this.colors.persisted;
+			return newMarker;
+		})];
+
 		this.g.append('defs').selectAll('marker')
-			.data(this.markers)
+			.data(markers)
 			.enter().append('marker')
-				.attr('id', (marker: IMarker) => marker.name)
+				.attr('id', (marker: IMarker) => marker.name + '-' + marker.color)
 				.attr('viewBox', (marker: IMarker) => marker.viewBox)
 				.attr('refX', (marker: IMarker) => marker.refX)
 				.attr('refY', (marker: IMarker) => marker.refY)
@@ -225,7 +224,7 @@ class Visualization extends React.Component<VisualizationProps, VisualizationSta
 				.attr('orient', 'auto')
 			.append('path')
 				.attr('d', (marker: IMarker) => marker.path)
-				.attr('fill', 'black')
+				.attr('fill', (marker: IMarker) => marker.color)
 
 		this.simulation = d3.forceSimulation(this.nodes)
 			.force('charge', d3.forceManyBody().strength(-1000))
@@ -280,7 +279,7 @@ class Visualization extends React.Component<VisualizationProps, VisualizationSta
 			.on('click', this.onClick.bind(this))
 			.attr('id', (node: INode) => node.id)
 			.attr('r', this.getRadius)
-			.attr('fill', '#2c3e50')
+			.attr('fill', this.colors.node)
 			.call(this.drag(this.simulation))
 			.merge(this.node);
 	}
@@ -289,11 +288,11 @@ class Visualization extends React.Component<VisualizationProps, VisualizationSta
 		this.link = this.link.data(edges, this.getEdgeId);
 		this.link.exit().remove();
 		this.link = this.link.enter().append('path')
-			.attr('stroke', '#e74c3c')
+			.attr('stroke', this.colors.hover)
 			.attr('stroke-width', this.getEdgeWeight)
 			.attr('fill', 'none')
 			.attr('id', this.getEdgeId)
-			.attr('marker-end', (edge: IEdge) => `url(#${edge.type})`)
+			.attr('marker-end', (edge: IEdge) => `url(#${edge.type}-${this.colors.hover})`)
 			.attr('class', (edge: IEdge) => edge.type)
 			.merge(this.link);
 	}
@@ -302,11 +301,11 @@ class Visualization extends React.Component<VisualizationProps, VisualizationSta
 		this.persistedLink = this.persistedLink.data(persistedEdges, this.getEdgeId);
 		this.persistedLink.exit().remove();
 		this.persistedLink = this.persistedLink.enter().append('path')
-			.attr('stroke', '#000')
+			.attr('stroke', this.colors.persisted)
 			.attr('stroke-width', this.getEdgeWeight)
 			.attr('fill', 'none')
 			.attr('id', this.getEdgeId)
-			.attr('marker-end', (edge: IEdge) => `url(#${edge.type})`)
+			.attr('marker-end', (edge: IEdge) => `url(#${edge.type}-${this.colors.persisted})`)
 			.attr('class', (edge: IEdge) => edge.type)
 			.merge(this.persistedLink);
 	}
@@ -332,7 +331,7 @@ class Visualization extends React.Component<VisualizationProps, VisualizationSta
 	}
 
 	private onMouseOver(node: INode) {
-		this.g.select('#' + node.id).attr('stroke', '#aaa').attr('stroke-width', 4);
+		this.g.select('#' + node.id).attr('stroke', this.colors.nodeHover).attr('stroke-width', 4);
 		this.edges = this.graphData.getEdgesFrom(node);
 		this.restart();
 	}
@@ -392,7 +391,7 @@ class Visualization extends React.Component<VisualizationProps, VisualizationSta
 
 	private calculateArrowOffset(this: any, edge: IEdge): string {
 		const pathLength = this.getTotalLength();
-		const markerLength = 4 * Math.sqrt(edge.weight * 10);
+		const markerLength = 6 * Math.sqrt(edge.weight * 10);
 		const markerSize = Math.sqrt(Math.pow(markerLength, 2) * 2);
 		const radius = (edge.target.size * 10) + markerSize;
 
