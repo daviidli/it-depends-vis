@@ -40,7 +40,7 @@ class Visualization extends React.Component<VisualizationProps, VisualizationSta
 	private persistedLink: any;
 	private node: any;
 	private label: any;
-	private percentages: any;
+	private edgeLabels: any;
 	private simulation: any;
 	private g: any;
 
@@ -191,7 +191,7 @@ class Visualization extends React.Component<VisualizationProps, VisualizationSta
 			.attr('stroke-width', 1)
 			.selectAll('.pLink');
 
-		this.percentages = this.g.append('text')
+		this.edgeLabels = this.g.append('text')
 			.attr('dy', -5)
 			.selectAll('.percentages');
 
@@ -257,11 +257,7 @@ class Visualization extends React.Component<VisualizationProps, VisualizationSta
 
 		this.restartLink(filteredEdges);
 		this.restartPersistedLinks(filteredPersistedEdges);
-
-		// if (this.props.graphType === Graph.CROSSCUT) {
-			this.restartPercentages([...filteredEdges, ...filteredPersistedEdges]);
-		// }
-		
+		this.restartEdgeLabels([...filteredEdges, ...filteredPersistedEdges]);
 		this.restartNode();
 		this.restartLabels();
 
@@ -310,10 +306,10 @@ class Visualization extends React.Component<VisualizationProps, VisualizationSta
 			.merge(this.persistedLink);
 	}
 
-	private restartPercentages(edges: IEdge[]) {
-		this.percentages = this.percentages.data(edges, this.getEdgeId);
-		this.percentages.exit().remove();
-		this.percentages = this.percentages.enter().append('textPath')
+	private restartEdgeLabels(edges: IEdge[]) {
+		this.edgeLabels = this.edgeLabels.data(edges, this.getEdgeId);
+		this.edgeLabels.exit().remove();
+		this.edgeLabels = this.edgeLabels.enter().append('textPath')
 			.attr('xlink:href', (edge: IEdge) => '#' + this.getEdgeId(edge))
 			.attr('startOffset', '45%')
 			.text((edge: IEdge) => {
@@ -323,7 +319,7 @@ class Visualization extends React.Component<VisualizationProps, VisualizationSta
 					return edge.type;
 				}
 			})
-			.merge(this.percentages);
+			.merge(this.edgeLabels);
 	}
 
 	private restartLabels() {
