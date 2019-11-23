@@ -114,7 +114,7 @@ const App = () => {
 					graphData={graphData}
 					percentageLow={data.percentageLow / 100}
 					percentageHigh={data.percentageHigh / 100}
-					graphType={settings.graph}
+					// graphType={settings.graph}
 				/>
 				<Footer />
 			</SettingsContext.Provider>

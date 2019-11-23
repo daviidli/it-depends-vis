@@ -21,7 +21,7 @@ interface VisualizationProps {
 	percentageLow: number,
 	percentageHigh: number,
 	graphData: GraphData,
-	graphType: Graph
+	// graphType: Graph
 };
 
 interface VisualizationState {
@@ -258,9 +258,9 @@ class Visualization extends React.Component<VisualizationProps, VisualizationSta
 		this.restartLink(filteredEdges);
 		this.restartPersistedLinks(filteredPersistedEdges);
 
-		if (this.props.graphType === Graph.CROSSCUT) {
+		// if (this.props.graphType === Graph.CROSSCUT) {
 			this.restartPercentages([...filteredEdges, ...filteredPersistedEdges]);
-		}
+		// }
 		
 		this.restartNode();
 		this.restartLabels();
@@ -311,12 +311,18 @@ class Visualization extends React.Component<VisualizationProps, VisualizationSta
 	}
 
 	private restartPercentages(edges: IEdge[]) {
-		this.percentages = this.percentages.data(this.getCrossCutEdges(edges), this.getEdgeId);
+		this.percentages = this.percentages.data(edges, this.getEdgeId);
 		this.percentages.exit().remove();
 		this.percentages = this.percentages.enter().append('textPath')
 			.attr('xlink:href', (edge: IEdge) => '#' + this.getEdgeId(edge))
-			.attr('startOffset', '50%')
-			.text((edge: IEdge) => edge.weight * 100 + '%')
+			.attr('startOffset', '45%')
+			.text((edge: IEdge) => {
+				if (edge.type === Graph.CROSSCUT) {
+					return edge.weight * 100 + '%';
+				} else {
+					return edge.type;
+				}
+			})
 			.merge(this.percentages);
 	}
 
