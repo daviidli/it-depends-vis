@@ -1,11 +1,26 @@
 import React from 'react';
 import * as d3 from 'd3';
 import GraphData, { INode, IEdge } from '../../data/GraphData';
+import { Graph } from '../../data/GraphType';
+import { DependencyType } from '../../data/DependencyType';
+
+import './Visualization.scss';
+
+interface IMarker {
+	name: string,
+	path: string,
+	viewBox: string,
+	refX: number,
+	refY: number,
+	width: number,
+	height: number
+};
 
 interface VisualizationProps {
 	percentageLow: number,
 	percentageHigh: number,
-	graphData: GraphData
+	graphData: GraphData,
+	graphType: Graph
 };
 
 interface VisualizationState {
@@ -27,6 +42,90 @@ class Visualization extends React.Component<VisualizationProps, VisualizationSta
 	private percentages: any;
 	private simulation: any;
 	private g: any;
+
+	private readonly markers : IMarker[] = [
+		{
+			name: Graph.CROSSCUT,
+			path: 'M0,-5L10,0L0,5',
+			viewBox: '0 -5 10 10',
+			refX: 0,
+			refY: 0,
+			width: 4,
+			height: 4
+		},
+		{
+			name: DependencyType.INHERITANCE,
+			path: 'M10 5 0 0 0 10 Z M8 5 1 8.4 1 1.6Z',
+			viewBox: '0 0 10 10',
+			refX: 0,
+			refY: 5,
+			width: 4,
+			height: 4
+		},
+		{
+			name: DependencyType.IMPLEMENTATION,
+			path: 'M10 5 0 0 0 10 Z M8 5 1 8.4 1 1.6Z',
+			viewBox: '0 0 10 10',
+			refX: 0,
+			refY: 5,
+			width: 4,
+			height: 4
+		},
+		{
+			name: DependencyType.AGGREGATION,
+			path: 'M-1 5 7.5 0 16 5 7.5 10Z M1.3 5 7.5 8.7 14 5 7.5 1.3Z',
+			viewBox: '0 0 16 10',
+			refX: 8,
+			refY: 5,
+			width: 6,
+			height: 4
+		},
+		{
+			name: DependencyType.COMPOSITION,
+			path: 'M-1 5 7.5 0 16 5 7.5 10Z',
+			viewBox: '0 0 16 10',
+			refX: 8,
+			refY: 5,
+			width: 6,
+			height: 4
+		},
+		{
+			name: DependencyType.ASSOCIATION,
+			path: 'M2,2 L10,6 L2,10 L6,6 L2,2',
+			viewBox: '0 0 12 12',
+			refX: 6,
+			refY: 6,
+			width: 10,
+			height: 10
+		},
+		{
+			name: DependencyType.DEPENDENCY,
+			path: 'M2,2 L10,6 L2,10 L6,6 L2,2',
+			viewBox: '0 0 16 10',
+			refX: 6,
+			refY: 6,
+			width: 10,
+			height: 10
+		},
+		{
+			name: DependencyType.REFERENCES,
+			path: 'M0,-5L10,0L0,5',
+			viewBox: '0 -5 10 10',
+			refX: 0,
+			refY: 0,
+			width: 4,
+			height: 4
+		},
+		{
+			name: DependencyType.CALLS,
+			path: 'M0,-5L10,0L0,5',
+			viewBox: '0 -5 10 10',
+			refX: 0,
+			refY: 0,
+			width: 4,
+			height: 4
+		}
+	];
 
 	constructor(props: any) {
 		super(props);
@@ -66,11 +165,7 @@ class Visualization extends React.Component<VisualizationProps, VisualizationSta
 		this.startD3Graph();
 	}
 
-	render() {
-		if (this.state.mounted) {
-			this.restart();
-		}
-		
+	render() {		
 		return (
 			<svg id={this.id}></svg>
 		);
@@ -106,31 +201,31 @@ class Visualization extends React.Component<VisualizationProps, VisualizationSta
 			.attr('stroke-width', 1)
 			.selectAll('.pLink');
 
+		this.percentages = this.g.append('text')
+			.attr('dy', -5)
+			.selectAll('.percentages');
+
 		this.node = this.g.append('g')
 			.attr('stroke', '#000')
 			.attr('stroke-width', 4)
 			.selectAll('.node');
 
-		this.percentages = this.g.append('text')
-			.attr('dy', -5)
-			.selectAll('.percentages');
-
 		this.label = this.g.append('g')
 			.selectAll('.label');
 
 		this.g.append('defs').selectAll('marker')
-			.data(['#000', '#e74c3c'])
+			.data(this.markers)
 			.enter().append('marker')
-				.attr('id', (type: string) => type)
-				.attr('viewBox', '0 -5 10 10')
-				.attr('refX', 0)
-				.attr('refY', 0)
-				.attr('markerWidth', 4)
-				.attr('markerHeight', 4)
+				.attr('id', (marker: IMarker) => marker.name)
+				.attr('viewBox', (marker: IMarker) => marker.viewBox)
+				.attr('refX', (marker: IMarker) => marker.refX)
+				.attr('refY', (marker: IMarker) => marker.refY)
+				.attr('markerWidth', (marker: IMarker) => marker.width)
+				.attr('markerHeight', (marker: IMarker) => marker.height)
 				.attr('orient', 'auto')
 			.append('path')
-				.attr('d', 'M0,-5L10,0L0,5')
-				.attr('fill', (type: string) => type)
+				.attr('d', (marker: IMarker) => marker.path)
+				.attr('fill', 'black')
 
 		this.simulation = d3.forceSimulation(this.nodes)
 			.force('charge', d3.forceManyBody().strength(-1000))
@@ -161,6 +256,22 @@ class Visualization extends React.Component<VisualizationProps, VisualizationSta
 		const filteredEdges = this.edges.filter(this.isWithinRange.bind(this));
 		const filteredPersistedEdges = this.persistedEdges.filter(this.isWithinRange.bind(this));
 
+		this.restartLink(filteredEdges);
+		this.restartPersistedLinks(filteredPersistedEdges);
+
+		if (this.props.graphType === Graph.CROSSCUT) {
+			this.restartPercentages([...filteredEdges, ...filteredPersistedEdges]);
+		}
+		
+		this.restartNode();
+		this.restartLabels();
+
+		this.simulation.nodes(this.nodes);
+		this.simulation.force('link').links(filteredPersistedEdges);
+		this.simulation.alpha(1).restart();
+	}
+
+	private restartNode() {
 		this.node = this.node.data(this.nodes, (node: INode) => node.name);
 		this.node.exit().remove();
 		this.node = this.node.enter().append('circle')
@@ -172,49 +283,52 @@ class Visualization extends React.Component<VisualizationProps, VisualizationSta
 			.attr('fill', '#2c3e50')
 			.call(this.drag(this.simulation))
 			.merge(this.node);
-		
-		this.link = this.link
-			.data(filteredEdges, this.getEdgeId);
+	}
+
+	private restartLink(edges: IEdge[]) {
+		this.link = this.link.data(edges, this.getEdgeId);
 		this.link.exit().remove();
 		this.link = this.link.enter().append('path')
 			.attr('stroke', '#e74c3c')
 			.attr('stroke-width', this.getEdgeWeight)
 			.attr('fill', 'none')
 			.attr('id', this.getEdgeId)
-			.attr('marker-end', () => 'url(##e74c3c)')
+			.attr('marker-end', (edge: IEdge) => `url(#${edge.type})`)
+			.attr('class', (edge: IEdge) => edge.type)
 			.merge(this.link);
+	}
 
-		this.persistedLink = this.persistedLink
-			.data(filteredPersistedEdges, this.getEdgeId);
+	private restartPersistedLinks(persistedEdges: IEdge[]) {
+		this.persistedLink = this.persistedLink.data(persistedEdges, this.getEdgeId);
 		this.persistedLink.exit().remove();
 		this.persistedLink = this.persistedLink.enter().append('path')
 			.attr('stroke', '#000')
 			.attr('stroke-width', this.getEdgeWeight)
 			.attr('fill', 'none')
 			.attr('id', this.getEdgeId)
-			.attr('marker-end', () => 'url(##000)')
+			.attr('marker-end', (edge: IEdge) => `url(#${edge.type})`)
+			.attr('class', (edge: IEdge) => edge.type)
 			.merge(this.persistedLink);
+	}
 
-		this.percentages = this.percentages
-			.data([...filteredEdges, ...filteredPersistedEdges], this.getEdgeId);
+	private restartPercentages(edges: IEdge[]) {
+		this.percentages = this.percentages.data(this.getCrossCutEdges(edges), this.getEdgeId);
 		this.percentages.exit().remove();
 		this.percentages = this.percentages.enter().append('textPath')
 			.attr('xlink:href', (edge: IEdge) => '#' + this.getEdgeId(edge))
 			.attr('startOffset', '50%')
 			.text((edge: IEdge) => edge.weight * 100 + '%')
 			.merge(this.percentages);
+	}
 
+	private restartLabels() {
 		this.label = this.label.data(this.nodes, (node: INode) => node.id);
 		this.label.exit().remove();
 		this.label = this.label.enter().append('text')
-			.attr('x', (node: INode) => -1 * node.name.length / 4 + 1 + 'em')
+			.attr('x', (node: INode) => -1 * node.name.length / 2 + 'ch')
 			.attr('y', (node: INode) => this.getRadius(node) + 20)
 			.text((node: INode) => node.name)
 			.merge(this.label);
-
-		this.simulation.nodes(this.nodes);
-		this.simulation.force('link').links(filteredPersistedEdges);
-		this.simulation.alpha(1).restart();
 	}
 
 	private onMouseOver(node: INode) {
@@ -291,7 +405,7 @@ class Visualization extends React.Component<VisualizationProps, VisualizationSta
 	}
 
 	private isWithinRange(edge: IEdge) {
-		return edge.weight >= this.props.percentageLow && edge.weight <= this.props.percentageHigh;
+		return edge.type !== Graph.CROSSCUT || (edge.weight >= this.props.percentageLow && edge.weight <= this.props.percentageHigh);
 	}
 
 	private getRadius(node: INode): number {
@@ -304,6 +418,10 @@ class Visualization extends React.Component<VisualizationProps, VisualizationSta
 
 	private getEdgeWeight(edge: IEdge): number {
 		return Math.pow(edge.weight, 1.5) * 6
+	}
+
+	private getCrossCutEdges(edges: IEdge[]): IEdge[] {
+		return edges.filter((edge) => edge.type === Graph.CROSSCUT);
 	}
 };
 

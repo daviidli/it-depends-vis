@@ -1,5 +1,7 @@
+import { DependencyType } from './DependencyType';
+
 export default interface IResponse {
 	names: string[],
-	data: number[][],
-	size: number[]
+	data: number[][] | DependencyType[][][],
+	size?: number[]
 }
