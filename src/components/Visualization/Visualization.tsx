@@ -44,10 +44,11 @@ class Visualization extends React.Component<VisualizationProps, VisualizationSta
 	private g: any;
 
 	private readonly colors = {
-		hover: '#e74c3c',
-		persisted: '#000',
-		node: '#2c3e50',
-		nodeHover: '#aaa'
+		hover: '#F50057',
+		persisted: '#95a5a6',
+		node: '#2c387e',
+		nodeHover: '#F50057',
+		nodeOutline: '#bdc3c7'
 	};
 
 	private readonly markers : IMarker[] = [
@@ -180,23 +181,19 @@ class Visualization extends React.Component<VisualizationProps, VisualizationSta
 		this.g = zoomContainer.append('g')
 			.attr('transform', 'translate(' + width / 2 + ',' + height * 0.4 + ')');
 
-		this.link = this.g.append('g')
-			.attr('stroke', '#000')
-			.attr('stroke-width', 1)
-			.selectAll('.link');
-
 		this.persistedLink = this.g.append('g')
-			.attr('stroke', '#000')
-			.attr('stroke-width', 1)
 			.selectAll('.pLink');
+
+		this.link = this.g.append('g')
+			.selectAll('.link');
 
 		this.edgeLabels = this.g.append('text')
 			.attr('dy', -5)
 			.selectAll('.percentages');
 
 		this.node = this.g.append('g')
-			.attr('stroke', '#000')
-			.attr('stroke-width', 4)
+			.attr('stroke', this.colors.nodeOutline)
+			.attr('stroke-width', 5)
 			.selectAll('.node');
 
 		this.label = this.g.append('g')
@@ -311,6 +308,7 @@ class Visualization extends React.Component<VisualizationProps, VisualizationSta
 		this.edgeLabels = this.edgeLabels.enter().append('textPath')
 			.attr('xlink:href', (edge: IEdge) => '#' + this.getEdgeId(edge))
 			.attr('startOffset', '45%')
+			.attr('fill', '#454545')
 			.text((edge: IEdge) => {
 				if (edge.type === Graph.CROSSCUT) {
 					return edge.weight * 100 + '%';
@@ -327,12 +325,13 @@ class Visualization extends React.Component<VisualizationProps, VisualizationSta
 		this.label = this.label.enter().append('text')
 			.attr('x', (node: INode) => -1 * node.name.length / 2 + 'ch')
 			.attr('y', (node: INode) => this.getRadius(node) + 20)
+			.attr('fill', '#000')
 			.text((node: INode) => node.name)
 			.merge(this.label);
 	}
 
 	private onMouseOver(node: INode) {
-		this.g.select('#' + node.id).attr('stroke', this.colors.nodeHover).attr('stroke-width', 4);
+		this.g.select('#' + node.id).attr('stroke', this.colors.nodeHover).attr('stroke-width', 5);
 		this.edges = this.graphData.getEdgesFrom(node);
 		this.restart();
 	}
@@ -417,11 +416,7 @@ class Visualization extends React.Component<VisualizationProps, VisualizationSta
 	}
 
 	private getEdgeWeight(edge: IEdge): number {
-		return Math.pow(edge.weight, 1.5) * 6
-	}
-
-	private getCrossCutEdges(edges: IEdge[]): IEdge[] {
-		return edges.filter((edge) => edge.type === Graph.CROSSCUT);
+		return Math.pow(edge.weight, 1.25) * 7;
 	}
 };
 

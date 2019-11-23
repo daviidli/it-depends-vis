@@ -28,7 +28,7 @@ const Dropdown = (props: DropdownProps<string>) => {
 
 	return (
 		<FormControl variant='outlined' className={clsx('dropdown', className)} disabled={disabled}>
-			<InputLabel ref={inputLabel} id={label} className='label' margin='dense'>
+			<InputLabel ref={inputLabel} id={label} className='label' margin='dense' color='secondary'>
 				{ label }
 			</InputLabel>
 			<Select
@@ -38,6 +38,7 @@ const Dropdown = (props: DropdownProps<string>) => {
 				margin='dense'
 				labelId={label}
 				labelWidth={labelWidth}
+				color='secondary'
 			>
 				{ values.map((val, i) => (<MenuItem key={val + i} value={val}>{ val }</MenuItem>)) }
 			</Select>

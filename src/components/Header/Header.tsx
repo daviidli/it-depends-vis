@@ -59,6 +59,7 @@ const Header = () => {
 						type='search'
 						variant='outlined'
 						margin='dense'
+						color='secondary'
 						fullWidth={true}
 						value={repo}
 						onChange={(e) => setRepo(e.target.value)}

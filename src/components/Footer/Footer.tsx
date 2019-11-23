@@ -49,6 +49,7 @@ const Footer = () => {
 					aria-labelledby='range-slider'
 					getAriaValueText={() => data.percentageLow + '-' + data.percentageHigh}
 					disabled={settings.graph === Graph.DEPENDENCY}
+					color='secondary'
 				/>
 			</Grid>
 			<Grid item xs={6} sm={4}>
