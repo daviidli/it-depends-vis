@@ -20,8 +20,7 @@ interface IMarker {
 interface VisualizationProps {
 	percentageLow: number,
 	percentageHigh: number,
-	graphData: GraphData,
-	// graphType: Graph
+	graphData: GraphData
 };
 
 interface VisualizationState {
