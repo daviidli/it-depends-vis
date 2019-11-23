@@ -4,16 +4,19 @@ import HelpModal from './components/Modal/HelpModal';
 import HelpModalContextProvider from './components/Modal/HelpModalContext';
 import Footer from './components/Footer/Footer';
 import Visualization from './components/Visualization/Visualization';
-import IResponse from './data/IResponse';
+import IResponse from './data/types/IResponse';
 import { SettingsContext, DataContext } from './AppContext';
 import GraphData from './data/GraphData';
-import { Granularity } from './data/GranularityEnum';
+import { Granularity } from './data/types/GranularityType';
+import { Graph } from './data/types/GraphType';
+import { DependencyType } from './data/types/DependencyType';
 
 export interface ISettings {
 	repository: string,
 	startCommit: string,
 	endCommit: string,
-	granularity: Granularity
+	granularity: Granularity,
+	graph: Graph
 };
 
 export interface IData {
@@ -28,7 +31,8 @@ const App = () => {
 		repository: '',
 		startCommit: '',
 		endCommit: '',
-		granularity: Granularity.FILES
+		granularity: Granularity.FILES,
+		graph: Graph.CROSSCUT
 	});
 
 	const [data, setData] = useState<IData>({
@@ -49,22 +53,37 @@ const App = () => {
 			return;
 		}
 		// call backend
-		const response: IResponse = {
-			names: ['constructor (A)', 'main (A)', 'receiveInput (A)', 'constructor (B)', 'doSomething (B)', 'doSomethingElse (B)', 'constructor (C1)', 'foo (C1)', 'constructor (C2)', 'barbar (C2)'],
-			size: [1,1,6,2,4,1,1,2,1,1],
-			data: [
-				[1,1,1,1,1,0,0,0,0,0],
-				[1,1,1,1,1,0,0,0,0,0],
-				[0.166666667,0.166666667,1,0.333333333,0.5,0.166666667,0.166666667,0.333333333,0.166666667,0],
-				[0.5,0.5,1,1,0.5,0.5,0,0,0,0],
-				[0.25,0.25,0.75,0.25,1,0,0,0.25,0,0],
-				[0,0,1,1,0,1,0,0,0,0],
-				[0,0,1,0,0,0,1,1,1,0],
-				[0,0,1,0,0.5,0,0.5,1,0.5,0],
-				[0,0,1,0,0,0,1,1,1,0],
-				[0,0,0,0,0,0,0,0,0,1]
-			]
-		};
+		let response: IResponse;
+		if (settings.graph === Graph.CROSSCUT) {
+			response = {
+				names: ['constructor (A)', 'main (A)', 'receiveInput (A)', 'constructor (B)', 'doSomething (B)', 'doSomethingElse (B)', 'constructor (C1)', 'foo (C1)', 'constructor (C2)', 'barbar (C2)'],
+				size: [1,1,6,2,4,1,1,2,1,1],
+				data: [
+					[1,1,1,1,1,0,0,0,0,0],
+					[1,1,1,1,1,0,0,0,0,0],
+					[0.166666667,0.166666667,1,0.333333333,0.5,0.166666667,0.166666667,0.333333333,0.166666667,0],
+					[0.5,0.5,1,1,0.5,0.5,0,0,0,0],
+					[0.25,0.25,0.75,0.25,1,0,0,0.25,0,0],
+					[0,0,1,1,0,1,0,0,0,0],
+					[0,0,1,0,0,0,1,1,1,0],
+					[0,0,1,0,0.5,0,0.5,1,0.5,0],
+					[0,0,1,0,0,0,1,1,1,0],
+					[0,0,0,0,0,0,0,0,0,1]
+				]
+			};
+		} else {
+			response = {
+				names: ["Foo", "Foo.function1", "Foo.function2", "Bar.function1", "Bar"],
+				data: [
+					[[], [], [DependencyType.DEPENDENCY], [], []],
+					[[], [], [DependencyType.ASSOCIATION], [], []],
+					[[], [], [], [], [DependencyType.DEPENDENCY]],
+					[[DependencyType.CALLS], [], [], [], []],
+					[[], [], [], [DependencyType.INHERITANCE], []],
+				]
+			}
+		}
+
 		const commits: string[] = [
 			'commit #1',
 			'commit #2',
