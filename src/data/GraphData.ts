@@ -1,7 +1,7 @@
-import IResponse from './IResponse';
+import IResponse from './types/IResponse';
 import * as d3 from 'd3';
-import { DependencyType } from './DependencyType';
-import { Graph } from './GraphType';
+import { DependencyType } from './types/DependencyType';
+import { Graph } from './types/GraphType';
 
 export interface IEdge extends d3.SimulationLinkDatum<INode> {
 	source: INode,

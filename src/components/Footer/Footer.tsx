@@ -5,8 +5,8 @@ import Dropdown from '../Dropdown/Dropdown';
 import clsx from 'clsx';
 import { ISettings, IData } from '../../App';
 import { SettingsContext, DataContext } from '../../AppContext';
-import { Granularity } from '../../data/GranularityType';
-import { Graph } from '../../data/GraphType';
+import { Granularity } from '../../data/types/GranularityType';
+import { Graph } from '../../data/types/GraphType';
 
 import './Footer.scss';
 

@@ -1,8 +1,8 @@
 import React from 'react';
 import * as d3 from 'd3';
 import GraphData, { INode, IEdge } from '../../data/GraphData';
-import { Graph } from '../../data/GraphType';
-import { DependencyType } from '../../data/DependencyType';
+import { Graph } from '../../data/types/GraphType';
+import { DependencyType } from '../../data/types/DependencyType';
 
 import './Visualization.scss';
 

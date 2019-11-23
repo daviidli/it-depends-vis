@@ -4,12 +4,12 @@ import HelpModal from './components/Modal/HelpModal';
 import HelpModalContextProvider from './components/Modal/HelpModalContext';
 import Footer from './components/Footer/Footer';
 import Visualization from './components/Visualization/Visualization';
-import IResponse from './data/IResponse';
+import IResponse from './data/types/IResponse';
 import { SettingsContext, DataContext } from './AppContext';
 import GraphData from './data/GraphData';
-import { Granularity } from './data/GranularityType';
-import { Graph } from './data/GraphType';
-import { DependencyType } from './data/DependencyType';
+import { Granularity } from './data/types/GranularityType';
+import { Graph } from './data/types/GraphType';
+import { DependencyType } from './data/types/DependencyType';
 
 export interface ISettings {
 	repository: string,
