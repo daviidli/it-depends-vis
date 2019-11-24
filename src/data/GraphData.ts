@@ -78,12 +78,12 @@ export default class GraphData {
 					edges.push({
 						source: this.nodes[j],
 						target: this.nodes[i],
-						weight: Math.round(dataVal * 100) / 100,
+						weight: dataVal,
 						type: Graph.CROSSCUT
 					});
 				} else {
 					const depTypes: DependencyType[] = data[i][j] as DependencyType[];
-					
+
 					// TODO currently only takes the first dependency type as the vis can't show more than one right now
 
 					// depTypes.forEach((type) => {
@@ -111,7 +111,6 @@ export default class GraphData {
 	}
 
 	private cleanName(name: string): string {
-		return name.replace(' ', '').replace('(', '').replace(')', '').replace('.', '');
-		// TODO: make this more robust
+		return name.replace(new RegExp(/\W/, 'g'), '-');
 	}
 }

@@ -32,7 +32,7 @@ const Footer = () => {
 	const isWide: boolean = window.innerWidth > 550;
 
 	return (
-		<Grid 
+		<Grid
 			className='footer'
 			container
 			spacing={0}
@@ -67,7 +67,7 @@ const Footer = () => {
 					className={clsx({ wide: isWide })}
 					selectedValue={settings.granularity}
 					label='Granularity'
-					disabled={false}
+					disabled={settings.graph === Graph.CROSSCUT}
 					setSelectedValue={setGranularity}
 					values={granularityTypes}
 				/>

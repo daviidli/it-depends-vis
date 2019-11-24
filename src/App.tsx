@@ -9,7 +9,15 @@ import { SettingsContext, DataContext } from './AppContext';
 import GraphData from './data/GraphData';
 import { Granularity } from './data/types/GranularityType';
 import { Graph } from './data/types/GraphType';
-import { DependencyType } from './data/types/DependencyType';
+import axios from 'axios';
+import { indexOfCommit } from './components/Header/CommitDropdown';
+
+export interface ICommit {
+	name: string,
+	author: string,
+	value: string,
+	sha: string
+};
 
 export interface ISettings {
 	repository: string,
@@ -23,10 +31,14 @@ export interface IData {
 	response: IResponse,
 	percentageLow: number,
 	percentageHigh: number,
-	commits: string[]
+	commits: ICommit[]
 };
 
 const App = () => {
+	const url: string = 'https://it-depends.herokuapp.com';
+	// const url = 'http://localhost:8080'
+	axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
+
 	const [settings, setSettings] = useState<ISettings>({
 		repository: '',
 		startCommit: '',
@@ -52,56 +64,97 @@ const App = () => {
 		if (settings.repository.length === 0) {
 			return;
 		}
-		// call backend
-		let response: IResponse;
-		if (settings.graph === Graph.CROSSCUT) {
-			response = {
-				names: ['constructor (A)', 'main (A)', 'receiveInput (A)', 'constructor (B)', 'doSomething (B)', 'doSomethingElse (B)', 'constructor (C1)', 'foo (C1)', 'constructor (C2)', 'barbar (C2)'],
-				size: [1,1,6,2,4,1,1,2,1,1],
-				data: [
-					[1,1,1,1,1,0,0,0,0,0],
-					[1,1,1,1,1,0,0,0,0,0],
-					[0.166666667,0.166666667,1,0.333333333,0.5,0.166666667,0.166666667,0.333333333,0.166666667,0],
-					[0.5,0.5,1,1,0.5,0.5,0,0,0,0],
-					[0.25,0.25,0.75,0.25,1,0,0,0.25,0,0],
-					[0,0,1,1,0,1,0,0,0,0],
-					[0,0,1,0,0,0,1,1,1,0],
-					[0,0,1,0,0.5,0,0.5,1,0.5,0],
-					[0,0,1,0,0,0,1,1,1,0],
-					[0,0,0,0,0,0,0,0,0,1]
-				]
-			};
-		} else {
-			response = {
-				names: ["Foo", "Foo.function1", "Foo.function2", "Bar.function1", "Bar"],
-				data: [
-					[[], [], [DependencyType.DEPENDENCY], [], []],
-					[[], [], [DependencyType.ASSOCIATION], [], []],
-					[[], [], [], [], [DependencyType.DEPENDENCY]],
-					[[DependencyType.CALLS], [], [], [], []],
-					[[], [], [], [DependencyType.INHERITANCE], []],
-				]
+
+		const getCommits = async () => {
+			try {
+				const response = await axios.put(`${url}/init?url=${settings.repository}`);
+				const commits = response.data.commits.reverse();
+				const processedCommits = commits.map(processCommit);
+				setData((prev) => ({...prev, commits: processedCommits}));
+				setSettings((prev) => ({...prev, startCommit: processedCommits[0].value, endCommit: processedCommits[processedCommits.length - 1].value}));
+			} catch (e) {
+				console.log(e);
+				// TODO: show error in UI
+			}
+		};
+
+		getCommits();
+	}, [settings.repository, setSettings, setData])
+
+	useEffect(() => {
+		if (settings.repository.length === 0 || settings.startCommit === '' || settings.endCommit === '') {
+			return;
+		}
+
+		const getGranularity = () => {
+			switch(settings.granularity) {
+				case Granularity.FILES:
+					return 'file';
+				case Granularity.CLASSES:
+					return 'class';
+				case Granularity.FUNCTIONS:
+					return 'method';
 			}
 		}
 
-		const commits: string[] = [
-			'commit #1',
-			'commit #2',
-			'commit #3',
-			'commit #4',
-			'commit #5',
-			'commit #6',
-			'commit #7',
-			'commit #8',
-			'commit #9',
-			'commit #10'
-		];
-		setData((prev: IData) => ({...prev, response: response, commits: commits}));
-	}, [settings, setData]);
+		const getVisData = async () => {
+			const commits = data.commits;
+			const granularity = getGranularity();
+
+			let responseData: IResponse;
+			if (settings.graph === Graph.CROSSCUT) {
+				const startIndex = indexOfCommit(commits, settings.startCommit);
+				const endIndex = indexOfCommit(commits, settings.endCommit);
+				try {
+					const response = await axios.get(`${url}/crosscut/${granularity}?start=${startIndex}&end=${endIndex}&url=${settings.repository}`);
+					responseData = response.data;
+				} catch (e) {
+					console.log(e);
+					responseData = {
+						names: [],
+						size: [],
+						data: []
+					};
+				}
+			} else {
+				const startIndex = indexOfCommit(commits, settings.startCommit);
+				const endIndex = indexOfCommit(commits, settings.endCommit);
+				const startSha = commits[startIndex].sha;
+				const endSha = commits[endIndex].sha;
+				try {
+					const response = await axios.get(`${url}/dependency/${granularity}?start=${startSha}&end=${endSha}&url=${settings.repository}`);
+					responseData = response.data;
+				} catch (e) {
+					console.log(e);
+					responseData = {
+						names: [],
+						size: [],
+						data: []
+					};
+				}
+			}
+
+			if (typeof responseData.size === 'number') {
+				const size = responseData.names.map(() => 3);
+				responseData.size = size;
+			}
+			setData((prev) => ({...prev, response: responseData}))
+		}
+
+		getVisData();
+	}, [settings.startCommit, settings.endCommit, settings.granularity, settings.repository, settings.graph, data.commits, setData]);
 
 	useEffect(() => {
 		setGraphData(new GraphData(data.response));
 	}, [data.response, setGraphData]);
+
+	const processCommit = (commit: any): ICommit => {
+		const indexOfNL = commit.message.indexOf('\n');
+		const name = indexOfNL === -1 ? commit.message : commit.message.substring(0, indexOfNL);
+		const author = commit.author ? commit.author.login : '';
+
+		return { name: name, author: author, value: `${name} - ${author}`, sha: commit.sha };
+	};
 
 	return (
 		<DataContext.Provider value={[data, setData]}>
