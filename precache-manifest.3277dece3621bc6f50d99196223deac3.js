@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "b93b4d0e641811c5a22d18aed23e452b",
+    "revision": "75b7ab54314ed8d875d19bd871d6b4e4",
     "url": "/it-depends-vis/index.html"
   },
   {
-    "revision": "e4b752fcbf74590d70e1",
+    "revision": "be7c0af89559f3a6887a",
     "url": "/it-depends-vis/static/css/main.e0cb3527.chunk.css"
   },
   {
@@ -12,8 +12,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/it-depends-vis/static/js/2.15ae0ba8.chunk.js"
   },
   {
-    "revision": "e4b752fcbf74590d70e1",
-    "url": "/it-depends-vis/static/js/main.aee74cf0.chunk.js"
+    "revision": "be7c0af89559f3a6887a",
+    "url": "/it-depends-vis/static/js/main.24567fc1.chunk.js"
   },
   {
     "revision": "b0564297b41803bf97ac",
