@@ -138,7 +138,7 @@ class Visualization extends React.Component<VisualizationProps, VisualizationSta
 			return false;
 		}
 	}
-	
+
 	componentDidUpdate() {
 		this.graphData = this.props.graphData;
 		this.nodes = this.graphData.getNodes();
@@ -164,13 +164,13 @@ class Visualization extends React.Component<VisualizationProps, VisualizationSta
 	private startD3Graph() {
 		const width = window.innerWidth;
 		const height = window.innerHeight;	
-	
+
 		const svg = d3.select('#' + this.id)
 			.attr('width', width)
 			.attr('height', height);
-		
+
 		const zoomContainer = svg.append('g');
-		
+
 		svg.call(d3.zoom()
 			.extent([[0, 0], [width, height]])
 			.scaleExtent([0.25, 4])
@@ -311,7 +311,7 @@ class Visualization extends React.Component<VisualizationProps, VisualizationSta
 			.attr('fill', '#454545')
 			.text((edge: IEdge) => {
 				if (edge.type === Graph.CROSSCUT) {
-					return edge.weight * 100 + '%';
+					return Math.round(edge.weight * 100) + '%';
 				} else {
 					return edge.type;
 				}
@@ -352,7 +352,7 @@ class Visualization extends React.Component<VisualizationProps, VisualizationSta
 			this.persistedNodes.splice(index, 1);
 			this.persistedEdges = this.persistedEdges.filter((edge) => edgesFromNode.indexOf(edge) < 0);
 		}
-		
+
 		this.restart();
 	}
 
