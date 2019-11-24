@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/it-depends-vis/static/css/main.e0cb3527.chunk.css",
-    "main.js": "/it-depends-vis/static/js/main.81c83d9e.chunk.js",
-    "main.js.map": "/it-depends-vis/static/js/main.81c83d9e.chunk.js.map",
+    "main.js": "/it-depends-vis/static/js/main.aee74cf0.chunk.js",
+    "main.js.map": "/it-depends-vis/static/js/main.aee74cf0.chunk.js.map",
     "runtime-main.js": "/it-depends-vis/static/js/runtime-main.cf6ed9f9.js",
     "runtime-main.js.map": "/it-depends-vis/static/js/runtime-main.cf6ed9f9.js.map",
     "static/js/2.15ae0ba8.chunk.js": "/it-depends-vis/static/js/2.15ae0ba8.chunk.js",
     "static/js/2.15ae0ba8.chunk.js.map": "/it-depends-vis/static/js/2.15ae0ba8.chunk.js.map",
     "index.html": "/it-depends-vis/index.html",
-    "precache-manifest.7a62f4bbcdd16a4ff35887b8df18dd04.js": "/it-depends-vis/precache-manifest.7a62f4bbcdd16a4ff35887b8df18dd04.js",
+    "precache-manifest.bfe17078a818e9097d2de0f6e63c7d98.js": "/it-depends-vis/precache-manifest.bfe17078a818e9097d2de0f6e63c7d98.js",
     "service-worker.js": "/it-depends-vis/service-worker.js",
     "static/css/main.e0cb3527.chunk.css.map": "/it-depends-vis/static/css/main.e0cb3527.chunk.css.map"
   },
@@ -16,6 +16,6 @@
     "static/js/runtime-main.cf6ed9f9.js",
     "static/js/2.15ae0ba8.chunk.js",
     "static/css/main.e0cb3527.chunk.css",
-    "static/js/main.81c83d9e.chunk.js"
+    "static/js/main.aee74cf0.chunk.js"
   ]
 }
