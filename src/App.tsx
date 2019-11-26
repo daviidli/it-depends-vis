@@ -144,7 +144,7 @@ const App = () => {
 				const size = responseData.names.map(() => Math.floor(Math.random() * (6 - 1) + 1));
 				responseData.size = size;
 			}
-			setData((prev: any) => ({...prev, response: responseData}))
+			setData((prev: IData) => ({...prev, response: responseData}))
 		}
 
 		getVisData();

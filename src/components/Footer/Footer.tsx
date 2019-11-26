@@ -27,7 +27,12 @@ const Footer = () => {
 		setData((prev: IData) => ({...prev, percentageLow: range[0], percentageHigh: range[1]}));
 	}
 
-	const granularityTypes: string[] = Object.values(Granularity);
+	let granularityTypes: string[] = Object.values(Granularity);
+
+	if (settings.graph === Graph.CROSSCUT) {
+		granularityTypes = ['Files', 'Functions'];
+	}
+
 	const graphTypes: string[] = Object.values(Graph);
 	const isWide: boolean = window.innerWidth > 550;
 
@@ -67,7 +72,7 @@ const Footer = () => {
 					className={clsx({ wide: isWide })}
 					selectedValue={settings.granularity}
 					label='Granularity'
-					disabled={settings.graph === Graph.CROSSCUT}
+					disabled={false}
 					setSelectedValue={setGranularity}
 					values={granularityTypes}
 				/>
