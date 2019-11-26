@@ -15,10 +15,11 @@ const Header = () => {
 	const [repo, setRepo] = useState('');
 	const setOpen: Function = useContext(HelpModalContext)[1];
 	const [settings, setSettings] = useContext(SettingsContext);
-	const [data] = useContext(DataContext);
+	const [data, setData] = useContext(DataContext);
 
 	const saveRepo = () => {
-		setSettings((prev: ISettings) => ({...prev, repository: repo}));
+		setSettings((prev: ISettings) => ({...prev, repository: repo, startCommit: '', endCommit: ''}));
+		setData((prev: ISettings) => ({...prev, commits: []}));
 	};
 
 	const handleKeyDown = (e: any) => {

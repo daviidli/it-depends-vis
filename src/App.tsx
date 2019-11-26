@@ -70,10 +70,12 @@ const App = () => {
 				const response = await axios.put(`${url}/init?url=${settings.repository}`);
 				const commits = response.data.commits.reverse();
 				const processedCommits = commits.map(processCommit);
-				setData((prev) => ({...prev, commits: processedCommits}));
-				setSettings((prev) => ({...prev, startCommit: processedCommits[0].value, endCommit: processedCommits[processedCommits.length - 1].value}));
+				setData((prev: IData) => ({...prev, commits: processedCommits}));
+				setSettings((prev: ISettings) => ({...prev, startCommit: processedCommits[0].value, endCommit: processedCommits[processedCommits.length - 1].value}));
 			} catch (e) {
 				console.log(e);
+				setData((prev: IData) => ({...prev, commits: []}));
+				setSettings((prev: ISettings) => ({...prev, startCommit: '', endCommit: ''}))
 				// TODO: show error in UI
 			}
 		};
@@ -108,6 +110,10 @@ const App = () => {
 				try {
 					const response = await axios.get(`${url}/crosscut/${granularity}?start=${startIndex}&end=${endIndex}&url=${settings.repository}`);
 					responseData = response.data;
+					responseData.names = responseData.names.map((name: string) => {
+						const i = name.lastIndexOf('/');
+						return name.substring(i + 1, name.length);
+					});
 				} catch (e) {
 					console.log(e);
 					responseData = {
@@ -135,10 +141,10 @@ const App = () => {
 			}
 
 			if (typeof responseData.size === 'number') {
-				const size = responseData.names.map(() => 3);
+				const size = responseData.names.map(() => Math.floor(Math.random() * (6 - 1) + 1));
 				responseData.size = size;
 			}
-			setData((prev) => ({...prev, response: responseData}))
+			setData((prev: any) => ({...prev, response: responseData}))
 		}
 
 		getVisData();
@@ -148,12 +154,12 @@ const App = () => {
 		setGraphData(new GraphData(data.response));
 	}, [data.response, setGraphData]);
 
-	const processCommit = (commit: any): ICommit => {
+	const processCommit = (commit: any, i: number): ICommit => {
 		const indexOfNL = commit.message.indexOf('\n');
 		const name = indexOfNL === -1 ? commit.message : commit.message.substring(0, indexOfNL);
 		const author = commit.author ? commit.author.login : '';
 
-		return { name: name, author: author, value: `${name} - ${author}`, sha: commit.sha };
+		return { name: name, author: author, value: `${i}. ${name} - ${author}`, sha: commit.sha };
 	};
 
 	return (
