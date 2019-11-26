@@ -114,6 +114,9 @@ const App = () => {
 						const i = name.lastIndexOf('/');
 						return name.substring(i + 1, name.length);
 					});
+
+					const size = responseData.names.map(() => Math.floor(Math.random() * (6 - 1) + 1));
+					responseData.size = size;
 				} catch (e) {
 					console.log(e);
 					responseData = {
@@ -130,6 +133,10 @@ const App = () => {
 				try {
 					const response = await axios.get(`${url}/dependency/${granularity}?start=${startSha}&end=${endSha}&url=${settings.repository}`);
 					responseData = response.data;
+
+					if (responseData.size) {
+						responseData.size = processSize(responseData.size);
+					}
 				} catch (e) {
 					console.log(e);
 					responseData = {
@@ -140,10 +147,6 @@ const App = () => {
 				}
 			}
 
-			if (typeof responseData.size === 'number') {
-				const size = responseData.names.map(() => Math.floor(Math.random() * (6 - 1) + 1));
-				responseData.size = size;
-			}
 			setData((prev: IData) => ({...prev, response: responseData}))
 		}
 
@@ -160,6 +163,13 @@ const App = () => {
 		const author = commit.author ? commit.author.login : '';
 
 		return { name: name, author: author, value: `${i}. ${name} - ${author}`, sha: commit.sha };
+	};
+
+	const processSize = (sizes: number[]): number[] => {
+		const minSize = Math.min(...sizes);
+		const maxSize = Math.max(...sizes);
+
+		return sizes.map((size: number) => 1 + ((size - minSize) / (maxSize - minSize) * 7));
 	};
 
 	return (
