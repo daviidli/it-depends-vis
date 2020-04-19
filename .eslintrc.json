@@ -38,6 +38,7 @@
 		"comma-dangle": ["error", "never"],
 		"arrow-parens": ["error", "as-needed"],
 		"react/jsx-indent": [2, "tab"],
-		"react/jsx-indent-props": [2, "tab"]
+		"react/jsx-indent-props": [2, "tab"],
+		"react/jsx-props-no-spreading": "off"
 	}
 }

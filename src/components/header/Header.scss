@@ -1,0 +1,25 @@
+.header {
+	background-color: #fff;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.06), 0 6px 20px 0 rgba(0, 0, 0, 0.02);
+
+	.icon {
+		margin-top: 3px;
+	}
+
+	.ant-page-header-heading-left {
+		width: 30em;
+	}
+
+	.ant-page-header-heading-extra {
+		width: 90%;
+	}
+
+	.contents {
+		width: 100%;
+
+		.dropdownContainer {
+			display: flex;
+			justify-content: center;
+		}
+	}
+}

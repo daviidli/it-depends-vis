@@ -1,0 +1,103 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SearchBox component should match snapshot 1`] = `
+<ForwardRef(AutoComplete)
+  autoFocus={true}
+  dropdownClassName="searchDropdown"
+  dropdownMatchSelectWidth={400}
+  filterOption={true}
+  onSelect={[MockFunction]}
+  options={
+    Array [
+      Object {
+        "label": "Files",
+        "options": Array [
+          Array [
+            Object {
+              "label": <div
+                className="searchItem"
+              >
+                file1
+              </div>,
+              "value": "file1",
+            },
+            Object {
+              "label": <div
+                className="searchItem"
+              >
+                file2
+              </div>,
+              "value": "file2",
+            },
+          ],
+        ],
+      },
+    ]
+  }
+>
+  <Input
+    className="searchInput"
+    placeholder="Select a file"
+    prefix={
+      <AiOutlineSearch
+        className="searchIcon"
+        color="grey"
+        size={24}
+      />
+    }
+    size="large"
+    type="text"
+  />
+</ForwardRef(AutoComplete)>
+`;
+
+exports[`SearchBox component should match snapshot with no files prop 1`] = `
+<ForwardRef(AutoComplete)
+  autoFocus={true}
+  dropdownClassName="searchDropdown"
+  dropdownMatchSelectWidth={400}
+  filterOption={true}
+  onSelect={[MockFunction]}
+  options={
+    Array [
+      Object {
+        "label": "Files",
+        "options": Array [
+          Array [
+            Object {
+              "label": <div
+                className="searchItem"
+              >
+                file1
+              </div>,
+              "value": "file1",
+            },
+            Object {
+              "label": <div
+                className="searchItem"
+              >
+                file2
+              </div>,
+              "value": "file2",
+            },
+          ],
+        ],
+      },
+    ]
+  }
+>
+  <Input
+    className="searchInput"
+    placeholder="Select a file"
+    prefix={
+      <AiOutlineSearch
+        className="searchIcon"
+        color="grey"
+        size={24}
+      />
+    }
+    size="large"
+    type="text"
+  />
+</ForwardRef(AutoComplete)>
+`;

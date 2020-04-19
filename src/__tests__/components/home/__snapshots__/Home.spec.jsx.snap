@@ -1,0 +1,68 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Home component should match snapshot 1`] = `
+<Fragment>
+  <Row
+    gutter={0}
+    justify="center"
+  >
+    <div
+      className="iconContainer"
+    >
+      <GiThink
+        color="#fff"
+        size={128}
+      />
+    </div>
+  </Row>
+  <Row
+    gutter={0}
+    justify="center"
+  >
+    <Title>
+      it depends
+    </Title>
+  </Row>
+  <Row
+    gutter={0}
+    justify="center"
+  >
+    <Search
+      className="repoInput"
+      enterButton={false}
+      onSearch={[MockFunction]}
+      placeholder="Repository"
+      prefix={
+        <GoRepo
+          className="repoIcon"
+          color="grey"
+          size={24}
+        />
+      }
+      size="large"
+    />
+  </Row>
+  <Row
+    gutter={0}
+    justify="center"
+  >
+    <Title
+      level={2}
+    >
+      About
+    </Title>
+  </Row>
+  <Row
+    gutter={0}
+    justify="center"
+  >
+    <div
+      className="about"
+    >
+      <Text>
+        Developers often encounter trouble traversing the information space of a large software system with extensive revision history. Looking through a list of commits is time-consuming, and fails to convey information in a form which efficiently communicates information about the system. it depends is a visualization which makes it easier for developers and managers to understand the dependencies between entities in a software system across commits.
+      </Text>
+    </div>
+  </Row>
+</Fragment>
+`;

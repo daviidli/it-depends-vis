@@ -12,6 +12,9 @@
 		"customize-cra": "^0.9.1",
 		"d3": "^5.15.1",
 		"d3-scale": "^3.2.1",
+		"enzyme": "^3.11.0",
+		"enzyme-adapter-react-16": "^1.15.2",
+		"enzyme-to-json": "^3.4.4",
 		"fluture": "^12.2.0",
 		"fluture-sanctuary-types": "^5.0.0",
 		"history": "^4.10.1",
@@ -27,6 +30,7 @@
 		"react-redux": "^7.2.0",
 		"react-router": "^5.1.2",
 		"react-scripts": "3.4.1",
+		"react-test-renderer": "^16.13.1",
 		"redux": "^4.0.5",
 		"sanctuary": "^3.0.0"
 	},

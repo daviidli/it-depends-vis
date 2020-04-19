@@ -1,0 +1,29 @@
+.iconContainer {
+	background-color: #e74c3c;
+	border-radius: 100em;
+	width: 150;
+	height: 150px;
+	padding: 18px 10px;
+	margin: 6em;
+	margin-bottom: 2em;
+}
+
+.repoInput {
+	margin: 6em;
+	margin-top: 4em;
+	max-width: 40em;
+	border-radius: 100em;
+	border: none;
+
+	.ant-input-suffix {
+		visibility: hidden;
+	}
+}
+
+.repoIcon {
+	margin-top: 6px;
+}
+
+.about {
+	max-width: 40em;
+}

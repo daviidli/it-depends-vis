@@ -1,0 +1,53 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Header component should match snapshot 1`] = `
+<PageHeader
+  backIcon={
+    <Button
+      block={false}
+      className="icon"
+      ghost={false}
+      htmlType="button"
+      icon={
+        <GiThink
+          size={32}
+        />
+      }
+      loading={false}
+      shape="circle"
+      size="large"
+      type="primary"
+    />
+  }
+  className="header"
+  extra={
+    <Row
+      className="contents"
+      gutter={0}
+      justify="end"
+    >
+      <Col />
+      <Col
+        md={12}
+        xs={22}
+      >
+        <UNDEFINED />
+      </Col>
+      <Col
+        className="dropdownContainer"
+        xs={2}
+      >
+        <UNDEFINED
+          icon={
+            <FiGitCommit
+              size={28}
+            />
+          }
+        />
+      </Col>
+    </Row>
+  }
+  onBack={[Function]}
+  title={<UNDEFINED />}
+/>
+`;

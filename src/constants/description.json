@@ -1,0 +1,3 @@
+{
+	"about": "Developers often encounter trouble traversing the information space of a large software system with extensive revision history. Looking through a list of commits is time-consuming, and fails to convey information in a form which efficiently communicates information about the system. it depends is a visualization which makes it easier for developers and managers to understand the dependencies between entities in a software system across commits."
+}
