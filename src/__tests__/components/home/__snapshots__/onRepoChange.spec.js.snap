@@ -32,6 +32,12 @@ Array [
   ],
   Array [
     Object {
+      "repo": "",
+      "type": "SET_REPO",
+    },
+  ],
+  Array [
+    Object {
       "payload": Object {
         "args": Array [
           "/",

@@ -5,7 +5,7 @@ import {
 } from 'fluture/index';
 import { push } from 'connected-react-router';
 import store from '../../store/store';
-import { setData, setError } from '../../actions/actions';
+import { setData, setError, setRepo } from '../../actions/actions';
 import { dispatch, dispatchThunk } from '../../utils/reduxUtils';
 import routes from '../../constants/routes.json';
 
@@ -14,13 +14,14 @@ const goToVis = dispatchThunk(store, push(routes.VIS));
 
 const dispatchData = pipe(prop('data'), setData, dispatch(store));
 const dispatchError = pipe(setError, dispatch(store));
+const dispatchClearRepo = dispatchThunk(store, setRepo(''));
 
 const putRequest = repo => attemptP(() => axios.put(`http://localhost:8080/init?url=${repo}`));
 
 const onRepoChange = pipe(
 	putRequest,
 	map(pipe(dispatchData, goToVis)),
-	mapRej(pipe(dispatchError, goHome)),
+	mapRej(pipe(dispatchError, dispatchClearRepo, goHome)),
 	fork(identity)(identity)
 );
 

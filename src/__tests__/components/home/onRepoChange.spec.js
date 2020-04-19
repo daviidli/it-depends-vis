@@ -30,7 +30,7 @@ describe('onRepoChange', () => {
 
 		onRepoChange();
 		setImmediate(() => {
-			expect(store.dispatch).toHaveBeenCalledTimes(2);
+			expect(store.dispatch).toHaveBeenCalledTimes(3);
 			expect(store.dispatch.mock.calls).toMatchSnapshot();
 			done();
 		});
