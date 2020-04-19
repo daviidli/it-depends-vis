@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`onRepoChange should call setData with correct payload 1`] = `
+Array [
+  Array [
+    Object {
+      "data": "foo",
+      "type": "SET_DATA",
+    },
+  ],
+  Array [
+    Object {
+      "payload": Object {
+        "args": Array [
+          "/vis",
+        ],
+        "method": "push",
+      },
+      "type": "@@router/CALL_HISTORY_METHOD",
+    },
+  ],
+]
+`;
+
+exports[`onRepoChange should fail and call goHome 1`] = `
+Array [
+  Array [
+    Object {
+      "error": [Error: error],
+      "type": "SET_ERROR",
+    },
+  ],
+  Array [
+    Object {
+      "payload": Object {
+        "args": Array [
+          "/",
+        ],
+        "method": "push",
+      },
+      "type": "@@router/CALL_HISTORY_METHOD",
+    },
+  ],
+]
+`;

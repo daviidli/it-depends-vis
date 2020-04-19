@@ -1,0 +1,65 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`actions should create setCommits action 1`] = `
+Object {
+  "commits": Array [
+    "commit1",
+    "commit2",
+  ],
+  "type": "SET_COMMITS",
+}
+`;
+
+exports[`actions should create setData action 1`] = `
+Object {
+  "data": Object {
+    "data": "someData",
+  },
+  "type": "SET_DATA",
+}
+`;
+
+exports[`actions should create setEndCommit action 1`] = `
+Object {
+  "endCommit": "lastCommit",
+  "type": "SET_END_COMMIT",
+}
+`;
+
+exports[`actions should create setError action 1`] = `
+Object {
+  "error": "error",
+  "type": "SET_ERROR",
+}
+`;
+
+exports[`actions should create setRange action 1`] = `
+Object {
+  "range": Array [
+    0,
+    100,
+  ],
+  "type": "SET_RANGE",
+}
+`;
+
+exports[`actions should create setRepo action 1`] = `
+Object {
+  "repo": "github.com/somerepo",
+  "type": "SET_REPO",
+}
+`;
+
+exports[`actions should create setSelectedFile action 1`] = `
+Object {
+  "filename": "file1",
+  "type": "SET_SELECTED_FILE",
+}
+`;
+
+exports[`actions should create setStartCommit action 1`] = `
+Object {
+  "startCommit": "firstCommit",
+  "type": "SET_START_COMMIT",
+}
+`;
