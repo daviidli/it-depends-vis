@@ -1,7 +1,5 @@
 import types from './types.json';
 
-export const setError = error => ({ type: types.SET_ERROR, error });
-
 export const setRepo = repo => ({ type: types.SET_REPO, repo });
 
 export const setData = data => ({ type: types.SET_DATA, data });

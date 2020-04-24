@@ -3,8 +3,6 @@ import {
 } from '../../actions/actions';
 
 describe('actions', () => {
-	it('should create setError action', () => expect(setError('error')).toMatchSnapshot());
-
 	it('should create setRepo action', () => expect(setRepo('github.com/somerepo')).toMatchSnapshot());
 
 	it('should create setData action', () => expect(setData({ data: 'someData' })).toMatchSnapshot());

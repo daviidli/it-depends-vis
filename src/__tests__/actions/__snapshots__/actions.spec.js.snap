@@ -26,13 +26,6 @@ Object {
 }
 `;
 
-exports[`actions should create setError action 1`] = `
-Object {
-  "error": "error",
-  "type": "SET_ERROR",
-}
-`;
-
 exports[`actions should create setRange action 1`] = `
 Object {
   "range": Array [
