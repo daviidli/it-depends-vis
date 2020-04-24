@@ -39,6 +39,8 @@
 		"arrow-parens": ["error", "as-needed"],
 		"react/jsx-indent": [2, "tab"],
 		"react/jsx-indent-props": [2, "tab"],
-		"react/jsx-props-no-spreading": "off"
+		"react/jsx-props-no-spreading": "off",
+		"no-spaced-func": "off",
+		"func-call-spacing": "off"
 	}
 }

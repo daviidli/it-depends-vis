@@ -30,7 +30,7 @@ exports[`Home component should match snapshot 1`] = `
     <Search
       className="repoInput"
       enterButton={false}
-      onSearch={[MockFunction]}
+      onSearch={[Function]}
       placeholder="Repository"
       prefix={
         <GoRepo

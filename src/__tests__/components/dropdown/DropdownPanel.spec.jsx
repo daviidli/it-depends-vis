@@ -6,8 +6,8 @@ import { clone } from 'ramda';
 import DropdownPanel from '../../../components/dropdown/DropdownPanel';
 
 const defaultProps = {
-	startCommit: 'a',
-	endCommit: 'f',
+	startCommit: 0,
+	endCommit: 5,
 	setStartCommit: jest.fn(),
 	setEndCommit: jest.fn(),
 	commits: ['a', 'b', 'c', 'd', 'e', 'f']
@@ -29,8 +29,8 @@ describe('DropdownPanel component', () => {
 
 	it('should match snapshot with correct options', () => {
 		const props = clone(defaultProps);
-		props.startCommit = 'b';
-		props.endCommit = 'd';
+		props.startCommit = 1;
+		props.endCommit = 3;
 		const { wrapper } = setup(props);
 		expect(toJson(wrapper)).toMatchSnapshot();
 	});
@@ -42,7 +42,7 @@ describe('DropdownPanel component', () => {
 		const { select } = setup(props);
 		select.at(0).simulate('select', 'b');
 		expect(mockSetStartCommit).toHaveBeenCalledTimes(1);
-		expect(mockSetStartCommit).toHaveBeenCalledWith('b');
+		expect(mockSetStartCommit).toHaveBeenCalledWith(1);
 	});
 
 	it('should call setEndCommit on select', () => {
@@ -52,6 +52,6 @@ describe('DropdownPanel component', () => {
 		const { select } = setup(props);
 		select.at(1).simulate('select', 'd');
 		expect(mockSetEndCommit).toHaveBeenCalledTimes(1);
-		expect(mockSetEndCommit).toHaveBeenCalledWith('d');
+		expect(mockSetEndCommit).toHaveBeenCalledWith(3);
 	});
 });

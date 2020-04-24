@@ -8,12 +8,10 @@ import {
 
 import './SearchBox.scss';
 
-const createSearchElement = value => <div className="searchItem">{ value }</div>;
-const createLabelObj = value => ({ value, label: createSearchElement(value) });
+const createLabelObj = value => ({ value, label: <div className="searchItem">{ value }</div> });
 
 const createOptions = pipe(
 	map(createLabelObj),
-	of,
 	objOf('options'),
 	mergeRight({ label: 'Files' }),
 	of

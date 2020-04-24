@@ -25,11 +25,11 @@ const Dropdown = ({
 
 Dropdown.propTypes = {
 	icon: PropTypes.element.isRequired,
-	startCommit: PropTypes.string.isRequired,
-	endCommit: PropTypes.string.isRequired,
+	startCommit: PropTypes.number.isRequired,
+	endCommit: PropTypes.number.isRequired,
 	setStartCommit: PropTypes.func.isRequired,
 	setEndCommit: PropTypes.func.isRequired,
-	commits: PropTypes.arrayOf(PropTypes.string).isRequired
+	commits: PropTypes.arrayOf(PropTypes.object).isRequired
 };
 
 export default Dropdown;

@@ -15,10 +15,10 @@ exports[`Dropdown component should match snapshot 1`] = `
           "f",
         ]
       }
-      endCommit="f"
+      endCommit={6}
       setEndCommit={[MockFunction]}
       setStartCommit={[MockFunction]}
-      startCommit="a"
+      startCommit={0}
     />
   }
   mouseEnterDelay={0.1}

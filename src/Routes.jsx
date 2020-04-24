@@ -2,7 +2,7 @@ import React from 'react';
 import { Switch, Route } from 'react-router';
 import App from './containers/App';
 import routes from './constants/routes.json';
-import Visualization from './components/visualization/Visualization';
+import Visualization from './containers/VisualizationPage';
 import HomePage from './containers/HomePage';
 
 const Routes = () => (

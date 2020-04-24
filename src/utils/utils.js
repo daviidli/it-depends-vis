@@ -11,19 +11,10 @@ import {
 	of,
 	fromPairs,
 	mergeAll,
-	equals,
-	thunkify
+	equals
 } from 'ramda';
-
-// getState :: a -> {*}
-export const getState = s => s.getState();
-// geStateThunk :: a -> (() -> {*})
-export const getStateThunk = thunkify(getState);
-
-// dispatch :: a -> b -> undefined
-export const dispatch = curry((s, x) => s.dispatch(x));
-// dispatchThunk :: a -> b -> (() -> undefined)
-export const dispatchThunk = thunkify(dispatch);
+import { attemptP } from 'fluture/index';
+import axios from 'axios';
 
 // renameKey :: String a -> String b -> {a: c} -> {b: c}
 export const renameKey = curry(
@@ -45,3 +36,12 @@ export const splitData = pipe(
 	renameKey('data', 'mappings'),
 	renameKey('size', 'sizes')
 );
+
+// futureFromP :: f -> Future a b
+export const futureFromP = f => attemptP(f);
+
+// axiosPut :: String -> Future a b
+export const axiosPut = url => futureFromP(() => axios.put(url));
+
+// axiosGet :: String -> Future a b
+export const axiosGet = url => futureFromP(() => axios.get(url));

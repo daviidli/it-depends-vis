@@ -1,29 +1,38 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Row, Typography, Input } from 'antd';
 import { GoRepo } from 'react-icons/go';
 import { GiThink } from 'react-icons/gi';
-import { ifElse, equals, identity } from 'ramda';
+import { length } from 'ramda';
 import { useHistory } from 'react-router';
+import { toast } from 'react-toastify';
 import description from '../../constants/description.json';
-import onRepoChange from './onRepoChange';
+import fetchCommits from './fetchCommits';
 import routes from '../../constants/routes.json';
 
 import './Home.scss';
 
-const Home = ({ repo, setRepo }) => {
+const Home = ({
+	setRepo, setCommits, setStartCommit, setEndCommit
+}) => {
 	const history = useHistory();
 
-	useEffect(() => {
-		ifElse(
-			equals(''),
-			identity,
-			x => {
-				history.push(routes.LOADING);
-				onRepoChange(x);
-			}
-		)(repo);
-	}, [repo]);
+	const onError = err => {
+		toast.error(err);
+		setRepo('');
+	};
+
+	const onComplete = c => {
+		setCommits(c);
+		setStartCommit(0);
+		setEndCommit(length(c) - 1);
+		history.push(routes.VIS);
+	};
+
+	const onSearch = repo => {
+		fetchCommits(onError, onComplete, repo);
+		setRepo(repo);
+	};
 
 	return (
 		<>
@@ -43,7 +52,7 @@ const Home = ({ repo, setRepo }) => {
 					prefix={
 						<GoRepo size={24} color="grey" className="repoIcon" />
 					}
-					onSearch={setRepo}
+					onSearch={onSearch}
 				/>
 			</Row>
 			<Row justify="center">
@@ -59,8 +68,10 @@ const Home = ({ repo, setRepo }) => {
 };
 
 Home.propTypes = {
-	repo: PropTypes.string.isRequired,
-	setRepo: PropTypes.func.isRequired
+	setRepo: PropTypes.func.isRequired,
+	setCommits: PropTypes.func.isRequired,
+	setStartCommit: PropTypes.func.isRequired,
+	setEndCommit: PropTypes.func.isRequired
 };
 
 export default Home;

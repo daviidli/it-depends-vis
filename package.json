@@ -31,8 +31,10 @@
 		"react-router": "^5.1.2",
 		"react-scripts": "3.4.1",
 		"react-test-renderer": "^16.13.1",
+		"react-toastify": "^5.5.0",
 		"redux": "^4.0.5",
-		"sanctuary": "^3.0.0"
+		"sanctuary": "^3.0.0",
+		"sanctuary-def": "^0.21.1"
 	},
 	"scripts": {
 		"start": "react-app-rewired start",
@@ -62,6 +64,11 @@
 		"eslint-plugin-jsx-a11y": "^6.2.3",
 		"eslint-plugin-react": "^7.19.0",
 		"eslint-plugin-react-hooks": "^2.5.1"
+	},
+	"jest": {
+		"testPathIgnorePatterns": [
+			"src/__tests__/testUtils.js"
+		]
 	},
 	"license": "MIT"
 }
