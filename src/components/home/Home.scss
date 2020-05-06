@@ -1,29 +1,71 @@
-.iconContainer {
-	background-color: #e74c3c;
-	border-radius: 100em;
-	width: 150;
-	height: 150px;
-	padding: 18px 10px;
-	margin: 6em;
-	margin-bottom: 2em;
-}
+@import '../../shared';
 
-.repoInput {
-	margin: 6em;
-	margin-top: 4em;
-	max-width: 40em;
-	border-radius: 100em;
-	border: none;
+.home {
+	min-height: 100vh;
+	width: 100%;
 
-	.ant-input-suffix {
-		visibility: hidden;
+	.iconContainer {
+		background-color: $primary-color;
+		border-radius: 100em;
+		width: 150;
+		height: 150px;
+		padding: 18px 10px;
+		margin: 4em;
+		margin-bottom: 0;
+	}
+
+	.title {
+		font-family: "PT Sans";
+	}
+
+	.repoInput {
+		margin: 3em 0;
+		border-radius: 0.5em 0 0 0.5em;
+	}
+
+	.ant-input-group-addon {
+		background-color: rgba($color: #000000, $alpha: 0);
+	}
+
+	.repoIcon {
+		margin-top: 6px;
+		margin-right: 3px;
+		margin-bottom: -3px;
+	}
+
+	.question-container {
+		width: 100%;
+	}
+
+	.question {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		@include button-hover;
+	}
+
+	.space {
+		width: 100%;
+	}
+
+	.ant-input-search-button {
+		border-radius: 0 0.5em 0.5em 0;
 	}
 }
 
-.repoIcon {
-	margin-top: 6px;
+.drawer {
+	.ant-drawer-content {
+		padding-top: 2.25em;
+		border-radius: 1em 1em 0 0;
+	}
+
+	.anticon.anticon-close {
+		@include button-hover;
+	}
+
+	p {
+		font-size: larger;
+	}
 }
 
-.about {
-	max-width: 40em;
-}
+

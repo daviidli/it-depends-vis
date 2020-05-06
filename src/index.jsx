@@ -2,12 +2,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
+import axios from 'axios';
 import * as serviceWorker from './serviceWorker';
 import { history } from './store/configureStore';
 import Routes from './Routes';
 import store from './store/store';
+import './index.scss';
 
-import './index.css';
+axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
 
 ReactDOM.render(
 	<Provider store={store}>

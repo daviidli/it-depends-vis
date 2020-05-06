@@ -1,25 +1,31 @@
+@import '../../shared';
+
 .header {
-	background-color: #fff;
-	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.06), 0 6px 20px 0 rgba(0, 0, 0, 0.02);
+	background-color: #ddd;
+	height: 5rem;
+	padding: 0.5em 1.5em;
 
-	.icon {
-		margin-top: 3px;
-	}
-
-	.ant-page-header-heading-left {
-		width: 30em;
-	}
-
-	.ant-page-header-heading-extra {
-		width: 90%;
+	.button-container {
+		@include button-hover;
 	}
 
 	.contents {
-		width: 100%;
+		margin-right: 1em;
 
 		.dropdownContainer {
 			display: flex;
 			justify-content: center;
 		}
+	}
+
+	.order-select {
+		margin-right: 3em;
+		margin-top: 0.75em;
+	}
+
+	#order {
+		visibility: hidden;
+		// display: inline-block;
+		// position: absolute;
 	}
 }

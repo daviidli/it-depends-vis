@@ -15,14 +15,14 @@ const Visualization = ({
 }) => {
 	const history = useHistory();
 
-	// useEffect(() => {
-	// 	const onError = err => {
-	// 		toast.error(err);
-	// 		history.push(routes.HOME);
-	// 	};
+	useEffect(() => {
+		const onError = err => {
+			toast.error(err);
+			history.push(routes.HOME);
+		};
 
-	// 	fetchData(onError, setData, startCommit, endCommit, repo);
-	// }, [startCommit, endCommit, setData, repo, history]);
+		fetchData(onError, setData, startCommit, endCommit, repo);
+	}, [startCommit, endCommit, setData, repo, history]);
 
 	return (
 		<Spin spinning={data === null}>
