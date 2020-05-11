@@ -7,19 +7,45 @@
 }
 
 .vis-container {
-	background-color: #ddd;
+	background-color: $header-color;
+}
+
+text {
+	font-size: smaller;
 }
 
 text.active {
 	fill: $primary-color;
 }
 
-// .cell {
-// 	stroke: rgba($color: #000, $alpha: 0);
-// 	stroke-width: 0.25em;
-// 	transition: stroke 0.3s;
+.cell {
+	stroke: rgba($color: #000, $alpha: 0);
+	stroke-width: 0.05em;
+	transition: stroke 0.1s;
 
-// 	&.active {
-// 		stroke: $primary-color;
-// 	}
-// }
+	&.active {
+		stroke: $primary-color;
+
+	}
+
+	&.active text {
+		visibility: visible !important;
+	}
+}
+
+.tooltip {
+	position: absolute;
+	background-color: #343434;
+	color: white;
+	padding: 0.75em;
+	font-size: small;
+	border-radius: 0.3em;
+	max-width: 200px;
+
+	p {
+		padding: 0;
+		margin: 0;
+		max-width: 190px;
+		word-wrap: break-word;
+	}
+}

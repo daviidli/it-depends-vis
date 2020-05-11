@@ -7,15 +7,16 @@ it('mapStateToProps should return files, mappings and sizes', () => {
 			data: [[1, 2], [1, 2]],
 			size: [1, 2]
 		},
-		selectedFile: 'file3',
+		ordering: 'descending',
+		topCount: 5,
 		foo: 1,
 		bar: 2
 	};
 	const expected = {
 		files: ['file1', 'file2'],
 		mappings: [[1, 2], [1, 2]],
-		sizes: [1, 2],
-		selectedFile: 'file3'
+		ordering: 'descending',
+		topCount: 5
 	};
 	expect(mapStateToProps(input)).toEqual(expected);
 });

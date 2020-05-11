@@ -26,13 +26,10 @@ Object {
 }
 `;
 
-exports[`actions should create setRange action 1`] = `
+exports[`actions should create setOrdering action 1`] = `
 Object {
-  "range": Array [
-    0,
-    100,
-  ],
-  "type": "SET_RANGE",
+  "ordering": "ascending",
+  "type": "SET_ORDERING",
 }
 `;
 
@@ -43,16 +40,16 @@ Object {
 }
 `;
 
-exports[`actions should create setSelectedFile action 1`] = `
-Object {
-  "filename": "file1",
-  "type": "SET_SELECTED_FILE",
-}
-`;
-
 exports[`actions should create setStartCommit action 1`] = `
 Object {
   "startCommit": "firstCommit",
   "type": "SET_START_COMMIT",
+}
+`;
+
+exports[`actions should create setTopCount action 1`] = `
+Object {
+  "topCount": 10,
+  "type": "SET_TOP_COUNT",
 }
 `;

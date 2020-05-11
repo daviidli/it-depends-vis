@@ -7,12 +7,24 @@ exports[`Dropdown component should match snapshot 1`] = `
     <DropdownPanel
       commits={
         Array [
-          "a",
-          "b",
-          "c",
-          "d",
-          "e",
-          "f",
+          Object {
+            "val": "a",
+          },
+          Object {
+            "val": "b",
+          },
+          Object {
+            "val": "c",
+          },
+          Object {
+            "val": "d",
+          },
+          Object {
+            "val": "e",
+          },
+          Object {
+            "val": "f",
+          },
         ]
       }
       endCommit={6}
@@ -28,15 +40,19 @@ exports[`Dropdown component should match snapshot 1`] = `
   transitionName="zoom-big"
   trigger="click"
 >
-  <Button
-    block={false}
-    ghost={false}
-    htmlType="button"
-    icon={<div />}
-    loading={false}
-    shape="circle"
-    size="large"
-    type="default"
-  />
+  <div
+    className="button"
+  >
+    <Button
+      block={false}
+      ghost={false}
+      htmlType="button"
+      icon={<div />}
+      loading={false}
+      shape="circle"
+      size="large"
+      type="default"
+    />
+  </div>
 </Popover>
 `;

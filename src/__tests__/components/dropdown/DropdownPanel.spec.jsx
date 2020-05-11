@@ -10,7 +10,14 @@ const defaultProps = {
 	endCommit: 5,
 	setStartCommit: jest.fn(),
 	setEndCommit: jest.fn(),
-	commits: ['a', 'b', 'c', 'd', 'e', 'f']
+	commits: [
+		{ sha: 'a' },
+		{ sha: 'b' },
+		{ sha: 'c' },
+		{ sha: 'd' },
+		{ sha: 'e' },
+		{ sha: 'f' }
+	]
 };
 
 const setup = (props = defaultProps) => {

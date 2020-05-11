@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router';
 import { Spin } from 'antd';
-import Header from '../header/Header';
+import Header from '../../containers/HeaderContainer';
 import D3 from '../../containers/D3Container';
 import fetchData from './fetchData';
 import routes from '../../constants/routes.json';
@@ -21,7 +21,11 @@ const Visualization = ({
 			history.push(routes.HOME);
 		};
 
-		fetchData(onError, setData, startCommit, endCommit, repo);
+		if (repo.length === 0) {
+			history.push(routes.HOME);
+		} else {
+			fetchData(onError, setData, startCommit, endCommit, repo);
+		}
 	}, [startCommit, endCommit, setData, repo, history]);
 
 	return (
@@ -36,7 +40,6 @@ Visualization.propTypes = {
 	startCommit: PropTypes.number.isRequired,
 	endCommit: PropTypes.number.isRequired,
 	repo: PropTypes.string.isRequired,
-	setRepo: PropTypes.func.isRequired,
 	setData: PropTypes.func.isRequired,
 	data: PropTypes.object
 };

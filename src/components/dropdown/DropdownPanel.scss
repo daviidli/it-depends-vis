@@ -1,7 +1,22 @@
-.dropdownSelect {
-	width: 100% !important;
+@import '../../shared';
+
+.dropdown-panel {
+	background-color: $header-color;
+
+	.dropdown-select {
+		width: 100% !important;
+	}
+
+	.dropdown-col {
+		padding: 1em;
+	}
 }
 
-.dropdownCol {
-	padding: 1em;
+.ant-popover-inner-content {
+	background-color: $header-color;
 }
+
+.ant-popover-arrow {
+	background-color: $header-color;
+}
+

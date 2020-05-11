@@ -68,4 +68,13 @@
 	}
 }
 
+.drawer-content {
+	img {
+		max-width: 100%;
+	}
 
+	a {
+		@include button-hover;
+		padding: 0 0.5em;
+	}
+}

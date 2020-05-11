@@ -2,7 +2,10 @@ import data from '../../reducers/data';
 import actions from '../../actions/types.json';
 
 describe('data reducer', () => {
-	it('should return inital state', () => expect(data(undefined, {})).toEqual(null));
+	it('should return inital state', () => expect(data(undefined, {})).toEqual({
+		names: [],
+		data: []
+	}));
 
 	it('should return same state', () => expect(
 		data({ data: 123 }, { type: 'foo', data: { data: 456 } })

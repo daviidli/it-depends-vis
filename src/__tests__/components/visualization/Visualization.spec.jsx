@@ -10,14 +10,13 @@ jest.mock('react-router');
 jest.mock('axios');
 jest.mock('react-toastify');
 jest.mock('../../../containers/D3Container', () => () => <div>d3 component</div>);
-jest.mock('../../../components/header/Header', () => () => <div>header</div>);
+jest.mock('../../../containers/HeaderContainer', () => () => <div>header</div>);
 
 const defaultProps = {
 	startCommit: 0,
 	endCommit: 1,
 	repo: 'repo1',
 	data: null,
-	setRepo: jest.fn(),
 	setData: jest.fn()
 };
 
@@ -51,7 +50,6 @@ describe('Visualization component', () => {
 			expect(defaultProps.setData).toHaveBeenCalledTimes(1);
 			expect(defaultProps.setData).toHaveBeenCalledWith('some data');
 			expect(toast.error).toHaveBeenCalledTimes(0);
-			expect(defaultProps.setRepo).toHaveBeenCalledTimes(0);
 			expect(mockPush).toHaveBeenCalledTimes(0);
 			done();
 		});
@@ -64,13 +62,26 @@ describe('Visualization component', () => {
 		toast.error.mockImplementation(jest.fn());
 		setupMount();
 		setImmediate(() => {
-			expect(defaultProps.setRepo).toHaveBeenCalledTimes(1);
-			expect(defaultProps.setRepo).toHaveBeenCalledWith('');
 			expect(mockPush).toHaveBeenCalledTimes(1);
 			expect(mockPush).toHaveBeenCalledWith('/');
 			expect(toast.error).toHaveBeenCalledTimes(1);
 			expect(toast.error).toHaveBeenCalledWith('oh no');
 			expect(defaultProps.setData).toHaveBeenCalledTimes(0);
+			done();
+		});
+	});
+
+	it('should go back home when repo is not set', done => {
+		const mockPush = jest.fn();
+		useHistory.mockImplementation(() => ({ push: mockPush }));
+		const props = { ...defaultProps };
+		props.repo = '';
+		setupMount(props);
+		setImmediate(() => {
+			expect(mockPush).toHaveBeenCalledTimes(1);
+			expect(mockPush).toHaveBeenCalledWith('/');
+			expect(toast.error).toHaveBeenCalledTimes(0);
+			expect(props.setData).toHaveBeenCalledTimes(0);
 			done();
 		});
 	});

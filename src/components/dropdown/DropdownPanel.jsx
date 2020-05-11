@@ -32,11 +32,11 @@ const DropdownPanel = ({
 	const onSelect = (fn, arr) => x => fn(indexOf(x, map(prop('sha'))(arr)));
 
 	return (
-		<Row>
-			<Col span={24} className="dropdownCol">
-				<div>Staring Commit</div>
+		<Row className="dropdown-panel">
+			<Col span={24} className="dropdown-col">
+				<div>Starting Commit</div>
 				<Select
-					className="dropdownSelect"
+					className="dropdown-select"
 					size="middle"
 					value={commits[startCommit].sha}
 					onSelect={onSelect(setStartCommit, commits)}
@@ -44,10 +44,10 @@ const DropdownPanel = ({
 					{ createStartCommitOptions(endCommit)(commits) }
 				</Select>
 			</Col>
-			<Col span={24} className="dropdownCol">
+			<Col span={24} className="dropdown-col">
 				<div>Ending Commit</div>
 				<Select
-					className="dropdownSelect"
+					className="dropdown-select"
 					size="middle"
 					value={commits[endCommit].sha}
 					onSelect={onSelect(setEndCommit, commits)}

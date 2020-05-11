@@ -9,13 +9,17 @@ import './DropdownPanelItem.scss';
 const firstParagraph = pipe(split('\n'), head);
 
 const DropdownPanelItem = ({ commit }) => (
-	<Row justify="center" align="center" gutter={[16, 8]}>
+	<Row className="dropdown-item" justify="center" align="center" gutter={[16, 8]}>
 		<Col span={3}>
-			<img className="avatar" alt="author avatar" src={commit.author.avatar_url} />
+			{commit && commit.author && commit.author.avatar_url ? (
+				<img
+					className="avatar"
+					alt="author avatar"
+					src={commit.author.avatar_url}
+				/>
+			) : null}
 		</Col>
-		<Col span={21}>
-			{ firstParagraph(commit.message) }
-		</Col>
+		<Col span={21}>{firstParagraph(commit.message)}</Col>
 	</Row>
 );
 
