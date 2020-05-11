@@ -1,4 +1,9 @@
-const { override, fixBabelImports, addLessLoader } = require('customize-cra');
+const {
+	override,
+	fixBabelImports,
+	addLessLoader,
+	addWebpackModuleRule
+} = require('customize-cra');
 
 module.exports = override(
 	fixBabelImports('import', {
@@ -8,6 +13,10 @@ module.exports = override(
 	}),
 	addLessLoader({
 		javascriptEnabled: true,
-		modifyVars: { '@primary-color': '#eb2f96' }
+		modifyVars: { '@primary-color': '#f5222d' }
+	}),
+	addWebpackModuleRule({
+		test: /\.md$/,
+		use: { loader: 'raw-loader' }
 	})
 );

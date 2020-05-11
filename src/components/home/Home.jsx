@@ -1,3 +1,5 @@
+/* eslint-disable import/no-dynamic-require */
+/* eslint-disable global-require */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -9,10 +11,11 @@ import { AiOutlineQuestionCircle } from 'react-icons/ai';
 import { length } from 'ramda';
 import { useHistory } from 'react-router';
 import { toast } from 'react-toastify';
+import ReactMarkdown from 'react-markdown';
 import fetchCommits from './fetchCommits';
 import routes from '../../constants/routes.json';
 import ContentContainer from '../contentContainer/ContentContainer';
-import description from '../../constants/description.json';
+import about from '../../constants/about.md';
 
 import './Home.scss';
 
@@ -57,7 +60,7 @@ const Home = ({
 						<Input.Search
 							className="repoInput"
 							size="large"
-							placeholder="Repository"
+							placeholder="Github Repository"
 							prefix={
 								<GoRepo color="grey" className="repoIcon" />
 							}
@@ -84,8 +87,7 @@ const Home = ({
 				visible={drawer}
 			>
 				<ContentContainer className="drawer-content">
-					<h1>About</h1>
-					<p>{ description.about }</p>
+					<ReactMarkdown source={about} transformImageUri={uri => require(`../../constants/img/${uri}`)} />
 				</ContentContainer>
 			</Drawer>
 		</>

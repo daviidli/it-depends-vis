@@ -52,7 +52,7 @@ describe('Home component', () => {
 			expect(defaultProps.setStartCommit).toHaveBeenCalledTimes(1);
 			expect(defaultProps.setStartCommit).toHaveBeenCalledWith(0);
 			expect(defaultProps.setEndCommit).toHaveBeenCalledTimes(1);
-			expect(defaultProps.setEndCommit).toHaveBeenCalledWith(3);
+			expect(defaultProps.setEndCommit).toHaveBeenCalledWith(2);
 			done();
 		});
 	});

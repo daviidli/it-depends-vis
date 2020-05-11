@@ -2,67 +2,98 @@
 
 exports[`Home component should match snapshot 1`] = `
 <Fragment>
-  <Row
-    gutter={0}
-    justify="center"
+  <ContentContainer
+    align="middle"
+    className="home"
   >
-    <div
-      className="iconContainer"
-    >
-      <GiThink
-        color="#fff"
-        size={128}
-      />
-    </div>
-  </Row>
-  <Row
-    gutter={0}
-    justify="center"
-  >
-    <Title>
-      it depends
-    </Title>
-  </Row>
-  <Row
-    gutter={0}
-    justify="center"
-  >
-    <Search
-      className="repoInput"
-      enterButton={false}
-      onSearch={[Function]}
-      placeholder="Repository"
-      prefix={
-        <GoRepo
-          className="repoIcon"
-          color="grey"
-          size={24}
-        />
-      }
+    <Space
+      className="space"
+      direction="vertical"
       size="large"
-    />
-  </Row>
-  <Row
-    gutter={0}
-    justify="center"
-  >
-    <Title
-      level={2}
     >
-      About
-    </Title>
-  </Row>
-  <Row
-    gutter={0}
-    justify="center"
+      <Row
+        gutter={0}
+        justify="center"
+      >
+        <div
+          className="iconContainer"
+        >
+          <GiThink
+            color="#fff"
+            size={128}
+          />
+        </div>
+      </Row>
+      <Row
+        gutter={0}
+        justify="center"
+      >
+        <Title
+          className="title"
+        >
+          It Depends
+        </Title>
+      </Row>
+      <Row
+        gutter={0}
+        justify="center"
+      >
+        <Search
+          className="repoInput"
+          enterButton="Search"
+          onSearch={[Function]}
+          placeholder="Github Repository"
+          prefix={
+            <GoRepo
+              className="repoIcon"
+              color="grey"
+            />
+          }
+          size="large"
+        />
+      </Row>
+      <Row
+        className="question-container"
+        gutter={0}
+        justify="center"
+      >
+        <div
+          className="question"
+          onClick={[Function]}
+        >
+          <AiOutlineQuestionCircle
+            size="1.5em"
+          />
+        </div>
+      </Row>
+    </Space>
+  </ContentContainer>
+  <withConfigConsumer(Drawer)
+    className="drawer"
+    closable={true}
+    height="85%"
+    onClose={[Function]}
+    placement="bottom"
+    visible={false}
   >
-    <div
-      className="about"
+    <ContentContainer
+      align="top"
+      className="drawer-content"
     >
-      <Text>
-        Developers often encounter trouble traversing the information space of a large software system with extensive revision history. Looking through a list of commits is time-consuming, and fails to convey information in a form which efficiently communicates information about the system. it depends is a visualization which makes it easier for developers and managers to understand the dependencies between entities in a software system across commits.
-      </Text>
-    </div>
-  </Row>
+      <ReactMarkdown
+        astPlugins={Array []}
+        escapeHtml={true}
+        parserOptions={Object {}}
+        plugins={Array []}
+        rawSourcePos={false}
+        renderers={Object {}}
+        skipHtml={false}
+        source="about.md"
+        sourcePos={false}
+        transformImageUri={[Function]}
+        transformLinkUri={[Function]}
+      />
+    </ContentContainer>
+  </withConfigConsumer(Drawer)>
 </Fragment>
 `;
