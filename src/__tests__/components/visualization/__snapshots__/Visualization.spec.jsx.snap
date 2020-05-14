@@ -7,6 +7,9 @@ exports[`Visualization component should match snapshot 1`] = `
   wrapperClassName=""
 >
   <Component />
-  <Component />
+  <Component
+    height={768}
+    width={1024}
+  />
 </Spin>
 `;

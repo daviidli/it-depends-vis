@@ -3,7 +3,7 @@
 exports[`App component should match snapshot 1`] = `
 <Fragment>
   <ToastContainer
-    autoClose={5000}
+    autoClose={2500}
     bodyClassName={null}
     className={null}
     closeButton={
@@ -34,7 +34,7 @@ exports[`App component should match snapshot 1`] = `
 exports[`App component should match snapshot with children 1`] = `
 <Fragment>
   <ToastContainer
-    autoClose={5000}
+    autoClose={2500}
     bodyClassName={null}
     className={null}
     closeButton={

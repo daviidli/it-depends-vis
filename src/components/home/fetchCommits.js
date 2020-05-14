@@ -6,10 +6,8 @@ import {
 } from 'ramda';
 import { axiosPut } from '../../utils/utils';
 
-// getCommitsFromResponse :: { data: { commits: [*] } } -> [*]
 export const getCommitsFromResponse = pipe(ifElse(hasPath(['data', 'commits']), path(['data', 'commits']), () => []));
 
-// commits :: String -> [*]
 export const commits = pipe(axiosPut, map(getCommitsFromResponse), mapRej(prop('message')));
 
 const fetchCommits = curry((onError, onComplete, repo) => {

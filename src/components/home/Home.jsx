@@ -19,6 +19,11 @@ import about from '../../constants/about.md';
 
 import './Home.scss';
 
+export const checkURL = url => {
+	const pattern = /^(https:\/\/|http:\/\/)?(www.)?github\.com\/.+\/.+/g;
+	return !!pattern.test(url);
+};
+
 const Home = ({
 	setRepo, setCommits, setStartCommit, setEndCommit
 }) => {
@@ -38,6 +43,11 @@ const Home = ({
 	};
 
 	const onSearch = repo => {
+		if (!checkURL(repo)) {
+			toast.error('Invalid Github URL');
+			return;
+		}
+
 		fetchCommits(onError, onComplete, repo);
 		setRepo(repo);
 	};
