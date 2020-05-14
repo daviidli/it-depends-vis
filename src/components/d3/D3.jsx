@@ -33,19 +33,79 @@ class D3 extends React.Component {
 	constructor(props) {
 		super(props);
 
-		this.margin = { top: 250, left: 250, right: 100 };
-		this.width = window.innerWidth - this.margin.left - this.margin.right;
-		this.height = window.innerHeight - this.margin.top - 100;
+		this.margin = {
+			top: 250, left: 250, right: 100, bottom: 25
+		};
+		this.width = props.width - this.margin.left - this.margin.right;
+		this.height = this.width + this.margin.bottom;
 
 		this.changeOrder = this.changeOrder.bind(this);
 		this.updateData = this.updateData.bind(this);
 		this.appendRow = this.appendRow.bind(this);
 		this.appendCol = this.appendCol.bind(this);
-
-		this.loaded = false;
+		this.initializeVis = this.initializeVis.bind(this);
+		this.renderData = this.renderData.bind(this);
+		this.updateDimensions = this.updateDimensions.bind(this);
 	}
 
 	componentDidMount() {
+		this.initializeVis();
+	}
+
+	shouldComponentUpdate(nextProps) {
+		const {
+			ordering,
+			mappings,
+			files,
+			topCount,
+			width,
+			height
+		} = this.props;
+		const {
+			ordering: nextOrdering,
+			mappings: nextMappings,
+			files: nextFiles,
+			topCount: nextTopCount,
+			width: nextWidth,
+			height: nextHeight
+		} = nextProps;
+
+		if (width !== nextWidth || height !== nextHeight) {
+			return true;
+		}
+
+		if (!nextFiles) {
+			return false;
+		}
+
+		if (nextOrdering !== ordering) {
+			this.changeOrder(nextOrdering);
+		}
+
+		if (nextMappings !== mappings || nextFiles !== files || nextTopCount !== topCount) {
+			this.renderData(nextFiles, nextMappings, nextTopCount, nextOrdering);
+		}
+
+		return false;
+	}
+
+	componentDidUpdate() {
+		const {
+			ordering, mappings, files, topCount, width
+		} = this.props;
+		d3.select('#d3-vis').selectAll('g').remove();
+		d3.select('.tooltip').remove();
+		this.updateDimensions(width);
+		this.initializeVis();
+		this.renderData(files, mappings, topCount, ordering);
+	}
+
+	updateDimensions(width) {
+		this.width = width - this.margin.left - this.margin.right;
+		this.height = this.width + this.margin.bottom;
+	}
+
+	initializeVis() {
 		this.x = d3
 			.scaleBand()
 			.range([0, this.width])
@@ -64,58 +124,18 @@ class D3 extends React.Component {
 			.select('.vis')
 			.append('div')
 			.attr('class', 'tooltip')
-			.style('opacity', 0)
-			.style(
-				'bottom',
-				`${this.height + 40}px`
-			)
-			.style(
-				'right',
-				`${this.width + this.margin.right + 20}px`
-			);
-
-		const data = this.updateData([''], [[]], 0);
-
-		this.x.domain(this.orderings.descending);
+			.style('opacity', 0);
 
 		this.svg.append('rect')
 			.attr('class', 'background')
 			.attr('width', this.width)
 			.attr('height', this.height)
 			.style('fill', '#fff');
-
-		this.appendRow(data);
-		this.appendCol(data);
-	}
-
-	shouldComponentUpdate(nextProps) {
-		if (!nextProps.files) {
-			return false;
-		}
-
-		if (nextProps.ordering !== this.props.ordering) {
-			this.changeOrder(nextProps.ordering);
-		}
-
-		if (
-			nextProps.mappings !== this.props.mappings
-			|| nextProps.files !== this.props.files
-			|| nextProps.topCount !== this.props.topCount
-		) {
-			const data = this.updateData(nextProps.files, nextProps.mappings, nextProps.topCount);
-			this.x.domain(this.orderings[nextProps.ordering]); // todo: fix to whatever is selected
-			this.svg.selectAll('.row').remove();
-			this.svg.selectAll('.column').remove();
-			this.appendRow(data);
-			this.appendCol(data);
-		}
-
-		return false;
 	}
 
 	appendRow(data) {
 		const {
-			x, z, colors, tooltip
+			x, z, colors, tooltip, margin, props
 		} = this;
 		const mouseOver = function mouseOver(p) {
 			d3.selectAll('.row-label').classed('active', (d, i) => i === p.row);
@@ -125,6 +145,31 @@ class D3 extends React.Component {
 				true
 			);
 
+			tooltip.selectAll('p').remove();
+
+			tooltip
+				.style('z-index', '1')
+				.style(
+					'bottom',
+					`${props.height - x(p.row) - margin.top - 80}px`
+				);
+
+			if (x(p.col) <= props.width / 2) {
+				tooltip
+					.style('right', 'inherit')
+					.style(
+						'left',
+						`${x(p.col) + margin.left}px`
+					);
+			} else {
+				tooltip
+					.style('left', 'inherit')
+					.style(
+						'right',
+						`${props.width - x(p.col) - margin.left - (1.25 * x.bandwidth())}px`
+					);
+			}
+
 			tooltip
 				.transition()
 				.duration(300)
@@ -132,7 +177,7 @@ class D3 extends React.Component {
 
 			tooltip.append('p').attr('class', '').text(`source: ${p.source}`);
 			tooltip.append('p').text(`target: ${p.target}`);
-			tooltip.append('p').text(`value: ${p.val * 100}%`);
+			tooltip.append('p').text(`value: ${Math.round(p.val * 10000) / 100}%`);
 		};
 
 		const mouseOut = function mouseOut(p) {
@@ -142,8 +187,7 @@ class D3 extends React.Component {
 				'active',
 				false
 			);
-			tooltip.transition().duration(300).style('opacity', 0);
-			tooltip.selectAll('p').remove();
+			tooltip.transition().duration(300).style('opacity', 0).style('z-index', '-1');
 		};
 
 		const appendRow = function appendRow(row) {
@@ -162,13 +206,16 @@ class D3 extends React.Component {
 				.style('fill', d => {
 					const sourcePath = d.source.split('/');
 					const targetPath = d.target.split('/');
-					if (sourcePath.length !== 1 && targetPath.length !== 1) {
-						if (sourcePath[0] === targetPath[0]) {
-							return colors(sourcePath[0]);
-						}
-						return '#000';
+
+					if (sourcePath.length === 1 && targetPath.length === 1) {
+						return colors('');
 					}
-					return colors('');
+
+					if (sourcePath[0] === targetPath[0]) {
+						return colors(sourcePath[0]);
+					}
+
+					return '#000';
 				})
 				.on('mouseover', mouseOver)
 				.on('mouseout', mouseOut);
@@ -261,6 +308,15 @@ class D3 extends React.Component {
 		return data;
 	}
 
+	renderData(files, mappings, topCount, ordering) {
+		const data = this.updateData(files, mappings, topCount);
+		this.x.domain(this.orderings[ordering]);
+		this.svg.selectAll('.row').remove();
+		this.svg.selectAll('.column').remove();
+		this.appendRow(data);
+		this.appendCol(data);
+	}
+
 	render() {
 		return (
 			<div className="vis-container">
@@ -276,7 +332,9 @@ D3.propTypes = {
 	files: PropTypes.arrayOf(PropTypes.string).isRequired,
 	mappings: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
 	topCount: PropTypes.number.isRequired,
-	ordering: PropTypes.oneOf(['descending', 'ascending', 'directory']).isRequired
+	ordering: PropTypes.oneOf(['descending', 'ascending', 'directory']).isRequired,
+	width: PropTypes.number.isRequired,
+	height: PropTypes.number.isRequired
 };
 
 export default D3;

@@ -1,7 +1,7 @@
-@import '../../shared';
+$dropdown-color: #ddd;
 
 .dropdown-panel {
-	background-color: $header-color;
+	background-color: $dropdown-color;
 
 	.dropdown-select {
 		width: 100% !important;
@@ -13,10 +13,11 @@
 }
 
 .ant-popover-inner-content {
-	background-color: $header-color;
+	background-color: $dropdown-color;
 }
 
 .ant-popover-arrow {
-	background-color: $header-color;
+	border-top-color: $dropdown-color !important;
+	border-left-color: $dropdown-color !important;
 }
 
