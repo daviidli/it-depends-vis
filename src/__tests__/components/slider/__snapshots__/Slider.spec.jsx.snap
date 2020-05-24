@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Slider component should match snapshot 1`] = `
+<Slider
+  className="slider"
+  defaultValue={20}
+  marks={
+    Object {
+      "1": "1",
+      "100": "100",
+      "20": "20",
+      "200": "200",
+      "50": "50",
+    }
+  }
+  max={200}
+  min={1}
+  onAfterChange={[MockFunction]}
+  tipFormatter={[Function]}
+/>
+`;

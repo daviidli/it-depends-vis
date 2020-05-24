@@ -1,0 +1,53 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DropdownPanel component should match snapshot 1`] = `
+<Row
+  align="center"
+  className="dropdown-item"
+  gutter={
+    Array [
+      16,
+      8,
+    ]
+  }
+  justify="center"
+>
+  <Col
+    span={3}
+  >
+    <img
+      alt="author avatar"
+      className="avatar"
+      src="url"
+    />
+  </Col>
+  <Col
+    span={21}
+  >
+    commit msg
+  </Col>
+</Row>
+`;
+
+exports[`DropdownPanel component should match snapshot without author avatar 1`] = `
+<Row
+  align="center"
+  className="dropdown-item"
+  gutter={
+    Array [
+      16,
+      8,
+    ]
+  }
+  justify="center"
+>
+  <Col
+    span={3}
+  />
+  <Col
+    span={21}
+  >
+    commit msg
+  </Col>
+</Row>
+`;

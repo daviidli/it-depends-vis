@@ -1,14 +1,14 @@
-# it-depends
+# it depends
 
-This is a repository for the visualization component of [it-depends](https://github.com/jyoo980/it-depends). This tool enables developers to more easily visualize dependencies between entities in a software system (classes, files, etc...) which cut across commit history. Development is currently in the early stages, so changes to this repo will be constant.
+This is a repository for the visualization component of [it-depends](https://github.com/jyoo980/it-depends). This tool enables developers to more easily visualize dependencies between entities in a software system (classes, files, etc...) which cut across commit history.
 
-## Dependencies
-* yarn (>= v1.17.3)
-* tsc (>= 3.6.3)
+## Version 2
+
+v2 is still in development. This is re-write of the original visualization to try out a few things. Mainly, I felt the directed graphs of the [v1](https://github.com/daviidli/it-depends-vis/tree/v1) were too hard to read as the commit histories got larger. Instead, v2 uses a matrix similar to an [directed adjacency matrix](https://en.wikipedia.org/wiki/Adjacency_matrix).
+
 
 ## Working with it-depends
-* To build: `yarn build`
-* To run locally: `yarn start`
+* To run locally `yarn start`
 * To execute all tests: `yarn test`
 
 ## Contributors

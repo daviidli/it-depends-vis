@@ -1,0 +1,58 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Dropdown component should match snapshot 1`] = `
+<Popover
+  className="dropdown"
+  content={
+    <DropdownPanel
+      commits={
+        Array [
+          Object {
+            "val": "a",
+          },
+          Object {
+            "val": "b",
+          },
+          Object {
+            "val": "c",
+          },
+          Object {
+            "val": "d",
+          },
+          Object {
+            "val": "e",
+          },
+          Object {
+            "val": "f",
+          },
+        ]
+      }
+      endCommit={6}
+      setEndCommit={[MockFunction]}
+      setStartCommit={[MockFunction]}
+      startCommit={0}
+    />
+  }
+  mouseEnterDelay={0.1}
+  mouseLeaveDelay={0.1}
+  overlayStyle={Object {}}
+  placement="bottomRight"
+  transitionName="zoom-big"
+  trigger="click"
+>
+  <div
+    className="button"
+  >
+    <Button
+      block={false}
+      ghost={false}
+      htmlType="button"
+      icon={<div />}
+      loading={false}
+      shape="circle"
+      size="large"
+      type="default"
+    />
+  </div>
+</Popover>
+`;

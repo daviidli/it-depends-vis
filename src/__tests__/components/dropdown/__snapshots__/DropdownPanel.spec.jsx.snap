@@ -1,0 +1,293 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DropdownPanel component should match snapshot 1`] = `
+<Row
+  className="dropdown-panel"
+  gutter={0}
+>
+  <Col
+    className="dropdown-col"
+    span={24}
+  >
+    <div>
+      Starting Commit
+    </div>
+    <Select
+      bordered={true}
+      choiceTransitionName="zoom"
+      className="dropdown-select"
+      onSelect={[Function]}
+      size="middle"
+      transitionName="slide-up"
+      value="a"
+    >
+      <Option
+        key="a"
+        value="a"
+      >
+        <DropdownPanelItem
+          commit={
+            Object {
+              "sha": "a",
+            }
+          }
+        />
+      </Option>
+      <Option
+        key="b"
+        value="b"
+      >
+        <DropdownPanelItem
+          commit={
+            Object {
+              "sha": "b",
+            }
+          }
+        />
+      </Option>
+      <Option
+        key="c"
+        value="c"
+      >
+        <DropdownPanelItem
+          commit={
+            Object {
+              "sha": "c",
+            }
+          }
+        />
+      </Option>
+      <Option
+        key="d"
+        value="d"
+      >
+        <DropdownPanelItem
+          commit={
+            Object {
+              "sha": "d",
+            }
+          }
+        />
+      </Option>
+      <Option
+        key="e"
+        value="e"
+      >
+        <DropdownPanelItem
+          commit={
+            Object {
+              "sha": "e",
+            }
+          }
+        />
+      </Option>
+    </Select>
+  </Col>
+  <Col
+    className="dropdown-col"
+    span={24}
+  >
+    <div>
+      Ending Commit
+    </div>
+    <Select
+      bordered={true}
+      choiceTransitionName="zoom"
+      className="dropdown-select"
+      onSelect={[Function]}
+      size="middle"
+      transitionName="slide-up"
+      value="f"
+    >
+      <Option
+        key="b"
+        value="b"
+      >
+        <DropdownPanelItem
+          commit={
+            Object {
+              "sha": "b",
+            }
+          }
+        />
+      </Option>
+      <Option
+        key="c"
+        value="c"
+      >
+        <DropdownPanelItem
+          commit={
+            Object {
+              "sha": "c",
+            }
+          }
+        />
+      </Option>
+      <Option
+        key="d"
+        value="d"
+      >
+        <DropdownPanelItem
+          commit={
+            Object {
+              "sha": "d",
+            }
+          }
+        />
+      </Option>
+      <Option
+        key="e"
+        value="e"
+      >
+        <DropdownPanelItem
+          commit={
+            Object {
+              "sha": "e",
+            }
+          }
+        />
+      </Option>
+      <Option
+        key="f"
+        value="f"
+      >
+        <DropdownPanelItem
+          commit={
+            Object {
+              "sha": "f",
+            }
+          }
+        />
+      </Option>
+    </Select>
+  </Col>
+</Row>
+`;
+
+exports[`DropdownPanel component should match snapshot with correct options 1`] = `
+<Row
+  className="dropdown-panel"
+  gutter={0}
+>
+  <Col
+    className="dropdown-col"
+    span={24}
+  >
+    <div>
+      Starting Commit
+    </div>
+    <Select
+      bordered={true}
+      choiceTransitionName="zoom"
+      className="dropdown-select"
+      onSelect={[Function]}
+      size="middle"
+      transitionName="slide-up"
+      value="b"
+    >
+      <Option
+        key="a"
+        value="a"
+      >
+        <DropdownPanelItem
+          commit={
+            Object {
+              "sha": "a",
+            }
+          }
+        />
+      </Option>
+      <Option
+        key="b"
+        value="b"
+      >
+        <DropdownPanelItem
+          commit={
+            Object {
+              "sha": "b",
+            }
+          }
+        />
+      </Option>
+      <Option
+        key="c"
+        value="c"
+      >
+        <DropdownPanelItem
+          commit={
+            Object {
+              "sha": "c",
+            }
+          }
+        />
+      </Option>
+    </Select>
+  </Col>
+  <Col
+    className="dropdown-col"
+    span={24}
+  >
+    <div>
+      Ending Commit
+    </div>
+    <Select
+      bordered={true}
+      choiceTransitionName="zoom"
+      className="dropdown-select"
+      onSelect={[Function]}
+      size="middle"
+      transitionName="slide-up"
+      value="d"
+    >
+      <Option
+        key="c"
+        value="c"
+      >
+        <DropdownPanelItem
+          commit={
+            Object {
+              "sha": "c",
+            }
+          }
+        />
+      </Option>
+      <Option
+        key="d"
+        value="d"
+      >
+        <DropdownPanelItem
+          commit={
+            Object {
+              "sha": "d",
+            }
+          }
+        />
+      </Option>
+      <Option
+        key="e"
+        value="e"
+      >
+        <DropdownPanelItem
+          commit={
+            Object {
+              "sha": "e",
+            }
+          }
+        />
+      </Option>
+      <Option
+        key="f"
+        value="f"
+      >
+        <DropdownPanelItem
+          commit={
+            Object {
+              "sha": "f",
+            }
+          }
+        />
+      </Option>
+    </Select>
+  </Col>
+</Row>
+`;
