@@ -4,10 +4,8 @@ This is a repository for the visualization component of [it-depends](https://git
 
 ## Version 2
 
-v2 is still in development. This is re-write of the original visualization to try out a few things. Mainly, I felt the directed graphs of the v1 were too hard to read as the commit histories got larger. Instead, v2 uses a matrix similar to an [directed adjacency matrix](https://en.wikipedia.org/wiki/Adjacency_matrix).
+v2 is still in development. This is re-write of the original visualization to try out a few things. Mainly, I felt the directed graphs of the [v1](https://github.com/daviidli/it-depends-vis/tree/v1) were too hard to read as the commit histories got larger. Instead, v2 uses a matrix similar to an [directed adjacency matrix](https://en.wikipedia.org/wiki/Adjacency_matrix).
 
-## Dependencies
-* yarn
 
 ## Working with it-depends
 * To run locally `yarn start`
