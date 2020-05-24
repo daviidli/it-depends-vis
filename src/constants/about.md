@@ -32,3 +32,7 @@ A slider is located in the header to allow for adjusting how much data the visua
 ### Ordering
 
 A dropdown is located in the header to allow for changing the ordering of the items in the visualization. There are three possible values: `descending`, `ascending` and `directory`.
+
+# Current Limitations
+
+As multiple concurrent requests to GitHub's API will trigger it to temporarily block requests from our token, It Depends will only pull the 500 latests commits and analyze those.

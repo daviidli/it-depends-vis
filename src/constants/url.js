@@ -1,3 +1,3 @@
-const url = 'https://itdepends.herokuapp.com:23463';
+const url = 'https://itdepends.herokuapp.com';
 
 export default url;
