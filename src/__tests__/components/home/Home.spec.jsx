@@ -1,32 +1,21 @@
 import React from 'react';
-import { shallow, mount } from 'enzyme';
+import { shallow } from 'enzyme';
 import toJson from 'enzyme-to-json';
 import { useHistory } from 'react-router';
 import { Input } from 'antd';
-import Home from '../../../components/home/Home';
-import onRepoChange from '../../../components/home/onRepoChange';
-
-// jest error: https://jestjs.io/docs/en/manual-mocks#mocking-methods-which-are-not-implemented-in-jsdom
-Object.defineProperty(window, 'matchMedia', {
-	writable: true,
-	value: jest.fn().mockImplementation(query => ({
-		matches: false,
-		media: query,
-		onchange: null,
-		addListener: jest.fn(), // deprecated
-		removeListener: jest.fn(), // deprecated
-		addEventListener: jest.fn(),
-		removeEventListener: jest.fn(),
-		dispatchEvent: jest.fn()
-	}))
-});
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import Home, { checkURL } from '../../../components/home/Home';
 
 jest.mock('react-router');
-jest.mock('../../../components/home/onRepoChange');
+jest.mock('axios');
+jest.mock('react-toastify');
 
 const defaultProps = {
-	repo: '',
-	setRepo: jest.fn()
+	setRepo: jest.fn(),
+	setCommits: jest.fn(),
+	setStartCommit: jest.fn(),
+	setEndCommit: jest.fn()
 };
 
 const setup = (props = defaultProps) => {
@@ -35,11 +24,6 @@ const setup = (props = defaultProps) => {
 		wrapper,
 		input: wrapper.find(Input.Search)
 	};
-};
-
-const setupMount = (props = defaultProps) => {
-	const wrapper = mount(<Home {...props} />);
-	return { wrapper };
 };
 
 describe('Home component', () => {
@@ -53,38 +37,91 @@ describe('Home component', () => {
 		expect(toJson(wrapper)).toMatchSnapshot();
 	});
 
-	it('should not trigger effect as repo is empty string', done => {
+	it('should update store on search complete', done => {
 		const mockPush = jest.fn();
 		useHistory.mockImplementation(() => ({ push: mockPush }));
-		onRepoChange.mockImplementation(jest.fn());
-		setupMount();
-		expect(mockPush).toHaveBeenCalledTimes(0);
-		setImmediate(() => {
-			expect(mockPush).toHaveBeenCalledTimes(0);
-			expect(onRepoChange).toHaveBeenCalledTimes(0);
-			done();
-		});
-	});
-
-	it('should trigger effect', done => {
-		const mockPush = jest.fn();
-		useHistory.mockImplementation(() => ({ push: mockPush }));
-		onRepoChange.mockImplementation(jest.fn());
-		setupMount({ repo: 'repo1', setRepo: jest.fn() });
+		axios.put.mockImplementation(jest.fn(() => Promise.resolve({ data: { commits: [1, 2, 3] } })));
+		toast.error.mockImplementation(jest.fn());
+		const { input } = setup();
+		input.simulate('search', 'https://github.com/user/repo1');
 		setImmediate(() => {
 			expect(mockPush).toHaveBeenCalledTimes(1);
-			expect(mockPush).toHaveBeenCalledWith('/loading');
-			expect(onRepoChange).toHaveBeenCalledTimes(1);
+			expect(mockPush).toHaveBeenCalledWith('/vis');
+			expect(defaultProps.setCommits).toHaveBeenCalledTimes(1);
+			expect(defaultProps.setCommits).toHaveBeenCalledWith([1, 2, 3]);
+			expect(defaultProps.setStartCommit).toHaveBeenCalledTimes(1);
+			expect(defaultProps.setStartCommit).toHaveBeenCalledWith(0);
+			expect(defaultProps.setEndCommit).toHaveBeenCalledTimes(1);
+			expect(defaultProps.setEndCommit).toHaveBeenCalledWith(2);
 			done();
 		});
 	});
 
-	it('should call setRepo on search', () => {
-		useHistory.mockImplementation(jest.fn());
-		const mockSetRepo = jest.fn();
-		const { input } = setup({ repo: '', setRepo: mockSetRepo });
-		input.simulate('search', 'repo1');
-		expect(mockSetRepo).toHaveBeenCalledTimes(1);
-		expect(mockSetRepo).toHaveBeenCalledWith('repo1');
+	it('should toast error message on search error', done => {
+		const mockPush = jest.fn();
+		useHistory.mockImplementation(() => ({ push: mockPush }));
+		axios.put.mockImplementation(jest.fn(() => Promise.reject(new Error('oh no'))));
+		toast.error.mockImplementation(jest.fn());
+		const { input } = setup();
+		input.simulate('search', 'https://github.com/user/repo1');
+		setImmediate(() => {
+			expect(mockPush).toHaveBeenCalledTimes(0);
+			expect(defaultProps.setCommits).toHaveBeenCalledTimes(0);
+			expect(defaultProps.setStartCommit).toHaveBeenCalledTimes(0);
+			expect(defaultProps.setEndCommit).toHaveBeenCalledTimes(0);
+			expect(defaultProps.setRepo).toHaveBeenCalledTimes(2);
+			expect(toast.error).toHaveBeenCalledTimes(1);
+			expect(toast.error).toHaveBeenCalledWith('oh no');
+			done();
+		});
+	});
+
+	it('should toast error message on invalid url', done => {
+		const mockPush = jest.fn();
+		useHistory.mockImplementation(() => ({ push: mockPush }));
+		axios.put.mockImplementation(jest.fn());
+		toast.error.mockImplementation(jest.fn());
+		const { input } = setup();
+		input.simulate('search', 'https://notGithub.com/user/repo1');
+		setImmediate(() => {
+			expect(mockPush).toHaveBeenCalledTimes(0);
+			expect(defaultProps.setCommits).toHaveBeenCalledTimes(0);
+			expect(defaultProps.setStartCommit).toHaveBeenCalledTimes(0);
+			expect(defaultProps.setEndCommit).toHaveBeenCalledTimes(0);
+			expect(defaultProps.setRepo).toHaveBeenCalledTimes(0);
+			expect(toast.error).toHaveBeenCalledTimes(1);
+			expect(toast.error).toHaveBeenCalledWith('Invalid Github URL');
+			done();
+		});
+	});
+});
+
+describe('checkURL', () => {
+	it('should return true for valid URL', () => {
+		const urls = [
+			'github.com/u/r',
+			'github.com/u_a/r_a',
+			'github.com/u-a/r-a',
+			'www.github.com/u/r',
+			'http://github.com/u/r',
+			'https://github.com/u/r',
+			'http://www.github.com/u/r',
+			'https://www.github.com/u/r',
+			'github.com/u/r/as'
+		];
+
+		urls.forEach(url => expect(checkURL(url)).toBeTruthy());
+	});
+
+	it('should return false for invalid URL', () => {
+		const urls = [
+			'githu.com/u/r',
+			'ww.github.com/u/r',
+			'http:/github.com/u/r',
+			'https:/github.com/u/r',
+			'https://www.github.com/u/'
+		];
+
+		urls.forEach(url => expect(checkURL(url)).toBeFalsy());
 	});
 });

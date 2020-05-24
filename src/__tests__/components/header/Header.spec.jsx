@@ -2,16 +2,20 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import toJson from 'enzyme-to-json';
 import { useHistory } from 'react-router';
-import { PageHeader } from 'antd';
 import Header from '../../../components/header/Header';
 
 jest.mock('react-router');
 
-const setup = () => {
-	const wrapper = shallow(<Header />);
+const defaultProps = {
+	ordering: 'descending',
+	setOrdering: jest.fn()
+};
+
+const setup = (props = defaultProps) => {
+	const wrapper = shallow(<Header {...props} />);
 	return {
 		wrapper,
-		button: wrapper.find(PageHeader)
+		button: wrapper.find('.button-container')
 	};
 };
 
@@ -27,7 +31,7 @@ describe('Header component', () => {
 		useHistory.mockImplementation(() => ({ push: mockPush }));
 		const { button } = setup();
 		expect(mockPush).toHaveBeenCalledTimes(0);
-		button.simulate('back');
+		button.simulate('click');
 		expect(mockPush).toHaveBeenCalledTimes(1);
 		expect(mockPush).toHaveBeenCalledWith('/');
 	});

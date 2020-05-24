@@ -1,16 +1,11 @@
 import { connect } from 'react-redux';
-import { pick, pipe } from 'ramda';
-import { setRange } from '../actions/actions';
 import D3 from '../components/d3/D3';
-import { splitData } from '../utils/reduxUtils';
 
-export const mapStateToProps = pipe(
-	pick(['data', 'selectedFile']),
-	splitData
-);
+export const mapStateToProps = ({ data, ordering, topCount }) => ({
+	files: data.names,
+	mappings: data.data,
+	ordering,
+	topCount
+});
 
-const actions = {
-	setRange
-};
-
-export default connect(mapStateToProps, actions)(D3);
+export default connect(mapStateToProps)(D3);

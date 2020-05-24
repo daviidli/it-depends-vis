@@ -6,8 +6,8 @@ import { clone } from 'ramda';
 import Slider from '../../../components/slider/Slider';
 
 const defaultProps = {
-	range: [0, 100],
-	setRange: jest.fn()
+	topCount: 20,
+	setTopCount: jest.fn()
 };
 
 const setup = (props = defaultProps) => {
@@ -24,14 +24,14 @@ describe('Slider component', () => {
 		expect(toJson(wrapper)).toMatchSnapshot();
 	});
 
-	it('should call setRange on after change', () => {
-		const mockSetRange = jest.fn();
+	it('should call setTopCount on after change', () => {
+		const mockSetTopCount = jest.fn();
 		const props = clone(defaultProps);
-		props.setRange = mockSetRange;
+		props.setTopCount = mockSetTopCount;
 		const { slider } = setup(props);
-		expect(mockSetRange).toHaveBeenCalledTimes(0);
-		slider.simulate('afterChange', [25, 50]);
-		expect(mockSetRange).toHaveBeenCalledTimes(1);
-		expect(mockSetRange).toHaveBeenCalledWith([25, 50]);
+		expect(mockSetTopCount).toHaveBeenCalledTimes(0);
+		slider.simulate('afterChange', 50);
+		expect(mockSetTopCount).toHaveBeenCalledTimes(1);
+		expect(mockSetTopCount).toHaveBeenCalledWith(50);
 	});
 });

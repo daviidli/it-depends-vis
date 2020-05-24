@@ -15,40 +15,70 @@ exports[`DropdownPanel component should match snapshot 1`] = `
       bordered={true}
       choiceTransitionName="zoom"
       className="dropdownSelect"
-      onSelect={[MockFunction]}
+      onSelect={[Function]}
       size="middle"
       transitionName="slide-up"
       value="a"
     >
       <Option
-        key="option-0"
+        key="a"
         value="a"
       >
-        a
+        <DropdownPanelItem
+          commit={
+            Object {
+              "sha": "a",
+            }
+          }
+        />
       </Option>
       <Option
-        key="option-1"
+        key="b"
         value="b"
       >
-        b
+        <DropdownPanelItem
+          commit={
+            Object {
+              "sha": "b",
+            }
+          }
+        />
       </Option>
       <Option
-        key="option-2"
+        key="c"
         value="c"
       >
-        c
+        <DropdownPanelItem
+          commit={
+            Object {
+              "sha": "c",
+            }
+          }
+        />
       </Option>
       <Option
-        key="option-3"
+        key="d"
         value="d"
       >
-        d
+        <DropdownPanelItem
+          commit={
+            Object {
+              "sha": "d",
+            }
+          }
+        />
       </Option>
       <Option
-        key="option-4"
+        key="e"
         value="e"
       >
-        e
+        <DropdownPanelItem
+          commit={
+            Object {
+              "sha": "e",
+            }
+          }
+        />
       </Option>
     </Select>
   </Col>
@@ -63,40 +93,70 @@ exports[`DropdownPanel component should match snapshot 1`] = `
       bordered={true}
       choiceTransitionName="zoom"
       className="dropdownSelect"
-      onSelect={[MockFunction]}
+      onSelect={[Function]}
       size="middle"
       transitionName="slide-up"
       value="f"
     >
       <Option
-        key="option-0"
+        key="b"
         value="b"
       >
-        b
+        <DropdownPanelItem
+          commit={
+            Object {
+              "sha": "b",
+            }
+          }
+        />
       </Option>
       <Option
-        key="option-1"
+        key="c"
         value="c"
       >
-        c
+        <DropdownPanelItem
+          commit={
+            Object {
+              "sha": "c",
+            }
+          }
+        />
       </Option>
       <Option
-        key="option-2"
+        key="d"
         value="d"
       >
-        d
+        <DropdownPanelItem
+          commit={
+            Object {
+              "sha": "d",
+            }
+          }
+        />
       </Option>
       <Option
-        key="option-3"
+        key="e"
         value="e"
       >
-        e
+        <DropdownPanelItem
+          commit={
+            Object {
+              "sha": "e",
+            }
+          }
+        />
       </Option>
       <Option
-        key="option-4"
+        key="f"
         value="f"
       >
-        f
+        <DropdownPanelItem
+          commit={
+            Object {
+              "sha": "f",
+            }
+          }
+        />
       </Option>
     </Select>
   </Col>
@@ -118,28 +178,46 @@ exports[`DropdownPanel component should match snapshot with correct options 1`] 
       bordered={true}
       choiceTransitionName="zoom"
       className="dropdownSelect"
-      onSelect={[MockFunction]}
+      onSelect={[Function]}
       size="middle"
       transitionName="slide-up"
       value="b"
     >
       <Option
-        key="option-0"
+        key="a"
         value="a"
       >
-        a
+        <DropdownPanelItem
+          commit={
+            Object {
+              "sha": "a",
+            }
+          }
+        />
       </Option>
       <Option
-        key="option-1"
+        key="b"
         value="b"
       >
-        b
+        <DropdownPanelItem
+          commit={
+            Object {
+              "sha": "b",
+            }
+          }
+        />
       </Option>
       <Option
-        key="option-2"
+        key="c"
         value="c"
       >
-        c
+        <DropdownPanelItem
+          commit={
+            Object {
+              "sha": "c",
+            }
+          }
+        />
       </Option>
     </Select>
   </Col>
@@ -154,34 +232,58 @@ exports[`DropdownPanel component should match snapshot with correct options 1`] 
       bordered={true}
       choiceTransitionName="zoom"
       className="dropdownSelect"
-      onSelect={[MockFunction]}
+      onSelect={[Function]}
       size="middle"
       transitionName="slide-up"
       value="d"
     >
       <Option
-        key="option-0"
+        key="c"
         value="c"
       >
-        c
+        <DropdownPanelItem
+          commit={
+            Object {
+              "sha": "c",
+            }
+          }
+        />
       </Option>
       <Option
-        key="option-1"
+        key="d"
         value="d"
       >
-        d
+        <DropdownPanelItem
+          commit={
+            Object {
+              "sha": "d",
+            }
+          }
+        />
       </Option>
       <Option
-        key="option-2"
+        key="e"
         value="e"
       >
-        e
+        <DropdownPanelItem
+          commit={
+            Object {
+              "sha": "e",
+            }
+          }
+        />
       </Option>
       <Option
-        key="option-3"
+        key="f"
         value="f"
       >
-        f
+        <DropdownPanelItem
+          commit={
+            Object {
+              "sha": "f",
+            }
+          }
+        />
       </Option>
     </Select>
   </Col>

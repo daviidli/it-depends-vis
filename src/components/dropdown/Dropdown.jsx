@@ -4,6 +4,7 @@ import {
 	Popover, Button
 } from 'antd';
 import DropdownPanel from './DropdownPanel';
+import './Dropdown.scss';
 
 const Dropdown = ({
 	icon, startCommit, endCommit, setStartCommit, setEndCommit, commits
@@ -19,17 +20,17 @@ const Dropdown = ({
 		placement="bottomRight"
 		trigger="click"
 	>
-		<Button type="default" shape="circle" size="large" icon={icon} />
+		<div className="button"><Button type="default" shape="circle" size="large" icon={icon} /></div>
 	</Popover>
 );
 
 Dropdown.propTypes = {
 	icon: PropTypes.element.isRequired,
-	startCommit: PropTypes.string.isRequired,
-	endCommit: PropTypes.string.isRequired,
+	startCommit: PropTypes.number.isRequired,
+	endCommit: PropTypes.number.isRequired,
 	setStartCommit: PropTypes.func.isRequired,
 	setEndCommit: PropTypes.func.isRequired,
-	commits: PropTypes.arrayOf(PropTypes.string).isRequired
+	commits: PropTypes.arrayOf(PropTypes.object).isRequired
 };
 
 export default Dropdown;

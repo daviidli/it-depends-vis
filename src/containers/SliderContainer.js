@@ -1,12 +1,13 @@
 import { connect } from 'react-redux';
-import { pick } from 'ramda';
-import { setRange } from '../actions/actions';
+import { setTopCount } from '../actions/actions';
 import Slider from '../components/slider/Slider';
 
-export const mapStateToProps = pick(['range']);
+export const mapStateToProps = ({ topCount }) => ({
+	topCount
+});
 
 const actions = {
-	setRange
+	setTopCount
 };
 
 export default connect(mapStateToProps, actions)(Slider);

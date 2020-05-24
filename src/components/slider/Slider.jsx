@@ -1,22 +1,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Slider as AntSlider } from 'antd';
-
 import './Slider.scss';
 
-const Slider = ({ range, setRange }) => (
+const Slider = ({ topCount, setTopCount }) => (
 	<AntSlider
 		className="slider"
-		marks={{ 0: '0%', 100: '100%' }}
-		range
-		defaultValue={range}
-		onAfterChange={setRange}
+		min={1}
+		max={200}
+		marks={{
+			1: '1',
+			20: '20',
+			50: '50',
+			100: '100',
+			200: '200'
+		}}
+		defaultValue={topCount}
+		onAfterChange={setTopCount}
 	/>
 );
 
 Slider.propTypes = {
-	range: PropTypes.arrayOf(PropTypes.number).isRequired,
-	setRange: PropTypes.func.isRequired
+	topCount: PropTypes.number.isRequired,
+	setTopCount: PropTypes.func.isRequired
 };
 
 export default Slider;
