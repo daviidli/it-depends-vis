@@ -37,7 +37,7 @@ const Visualization = ({
 	}, []);
 
 	return (
-		<Spin spinning={data === null}>
+		<Spin spinning={!data.data.length}>
 			<Header />
 			<D3 width={windowSize[0]} height={windowSize[1]} />
 		</Spin>

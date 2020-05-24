@@ -5,6 +5,7 @@ import {
 	pipe, path, hasPath, ifElse, prop, curry
 } from 'ramda';
 import { axiosPut } from '../../utils/utils';
+import url from '../../constants/url';
 
 export const getCommitsFromResponse = pipe(ifElse(hasPath(['data', 'commits']), path(['data', 'commits']), () => []));
 
@@ -14,7 +15,7 @@ const fetchCommits = curry((onError, onComplete, repo) => {
 	fork
 		(onError)
 		(onComplete)
-		(commits(`http://localhost:8080/init?url=${repo}`));
+		(commits(`${url}/init?url=${repo}`));
 });
 
 export default fetchCommits;
