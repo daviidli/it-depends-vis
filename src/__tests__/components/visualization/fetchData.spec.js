@@ -42,7 +42,7 @@ describe('fetchCommits', () => {
 		fetchData(onError, onComplete, 0, 3, 'repo1');
 		setImmediate(() => {
 			expect(axios.get).toHaveBeenCalledTimes(1);
-			expect(axios.get).toHaveBeenCalledWith('http://localhost:8080/crosscut/file?start=0&end=3&url=repo1');
+			expect(axios.get).toHaveBeenCalledWith('https://itdepends.herokuapp.com/crosscut/file?start=0&end=3&url=repo1');
 			expect(onComplete).toHaveBeenCalledTimes(1);
 			expect(onComplete).toHaveBeenCalledWith({ foo: 'bar', bar: 'foo' });
 			expect(onError).toHaveBeenCalledTimes(0);
@@ -57,7 +57,7 @@ describe('fetchCommits', () => {
 		fetchData(onError, onComplete, 0, 3, 'repo1');
 		setImmediate(() => {
 			expect(axios.get).toHaveBeenCalledTimes(1);
-			expect(axios.get).toHaveBeenCalledWith('http://localhost:8080/crosscut/file?start=0&end=3&url=repo1');
+			expect(axios.get).toHaveBeenCalledWith('https://itdepends.herokuapp.com/crosscut/file?start=0&end=3&url=repo1');
 			expect(onError).toHaveBeenCalledTimes(1);
 			expect(onError).toHaveBeenCalledWith('some error message');
 			expect(onComplete).toHaveBeenCalledTimes(0);

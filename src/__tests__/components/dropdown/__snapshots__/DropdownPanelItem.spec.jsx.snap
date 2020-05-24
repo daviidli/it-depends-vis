@@ -3,6 +3,7 @@
 exports[`DropdownPanel component should match snapshot 1`] = `
 <Row
   align="center"
+  className="dropdown-item"
   gutter={
     Array [
       16,
@@ -31,6 +32,7 @@ exports[`DropdownPanel component should match snapshot 1`] = `
 exports[`DropdownPanel component should match snapshot without author avatar 1`] = `
 <Row
   align="center"
+  className="dropdown-item"
   gutter={
     Array [
       16,

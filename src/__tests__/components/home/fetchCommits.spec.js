@@ -70,7 +70,7 @@ describe('fetchCommits', () => {
 		fetchCommits(onError, onComplete, 'repo1');
 		setImmediate(() => {
 			expect(axios.put).toHaveBeenCalledTimes(1);
-			expect(axios.put).toHaveBeenCalledWith('http://localhost:8080/init?url=repo1');
+			expect(axios.put).toHaveBeenCalledWith('https://itdepends.herokuapp.com/init?url=repo1');
 			expect(onComplete).toHaveBeenCalledTimes(1);
 			expect(onComplete).toHaveBeenCalledWith([1, 2, 3]);
 			expect(onError).toHaveBeenCalledTimes(0);
@@ -85,7 +85,7 @@ describe('fetchCommits', () => {
 		fetchCommits(onError, onComplete, 'repo1');
 		setImmediate(() => {
 			expect(axios.put).toHaveBeenCalledTimes(1);
-			expect(axios.put).toHaveBeenCalledWith('http://localhost:8080/init?url=repo1');
+			expect(axios.put).toHaveBeenCalledWith('https://itdepends.herokuapp.com/init?url=repo1');
 			expect(onError).toHaveBeenCalledTimes(1);
 			expect(onError).toHaveBeenCalledWith('some error message');
 			expect(onComplete).toHaveBeenCalledTimes(0);

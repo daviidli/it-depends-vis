@@ -2,19 +2,20 @@
 
 exports[`DropdownPanel component should match snapshot 1`] = `
 <Row
+  className="dropdown-panel"
   gutter={0}
 >
   <Col
-    className="dropdownCol"
+    className="dropdown-col"
     span={24}
   >
     <div>
-      Staring Commit
+      Starting Commit
     </div>
     <Select
       bordered={true}
       choiceTransitionName="zoom"
-      className="dropdownSelect"
+      className="dropdown-select"
       onSelect={[Function]}
       size="middle"
       transitionName="slide-up"
@@ -83,7 +84,7 @@ exports[`DropdownPanel component should match snapshot 1`] = `
     </Select>
   </Col>
   <Col
-    className="dropdownCol"
+    className="dropdown-col"
     span={24}
   >
     <div>
@@ -92,7 +93,7 @@ exports[`DropdownPanel component should match snapshot 1`] = `
     <Select
       bordered={true}
       choiceTransitionName="zoom"
-      className="dropdownSelect"
+      className="dropdown-select"
       onSelect={[Function]}
       size="middle"
       transitionName="slide-up"
@@ -165,19 +166,20 @@ exports[`DropdownPanel component should match snapshot 1`] = `
 
 exports[`DropdownPanel component should match snapshot with correct options 1`] = `
 <Row
+  className="dropdown-panel"
   gutter={0}
 >
   <Col
-    className="dropdownCol"
+    className="dropdown-col"
     span={24}
   >
     <div>
-      Staring Commit
+      Starting Commit
     </div>
     <Select
       bordered={true}
       choiceTransitionName="zoom"
-      className="dropdownSelect"
+      className="dropdown-select"
       onSelect={[Function]}
       size="middle"
       transitionName="slide-up"
@@ -222,7 +224,7 @@ exports[`DropdownPanel component should match snapshot with correct options 1`] 
     </Select>
   </Col>
   <Col
-    className="dropdownCol"
+    className="dropdown-col"
     span={24}
   >
     <div>
@@ -231,7 +233,7 @@ exports[`DropdownPanel component should match snapshot with correct options 1`] 
     <Select
       bordered={true}
       choiceTransitionName="zoom"
-      className="dropdownSelect"
+      className="dropdown-select"
       onSelect={[Function]}
       size="middle"
       transitionName="slide-up"

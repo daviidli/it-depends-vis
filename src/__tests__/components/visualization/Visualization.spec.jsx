@@ -16,7 +16,9 @@ const defaultProps = {
 	startCommit: 0,
 	endCommit: 1,
 	repo: 'repo1',
-	data: null,
+	data: {
+		data: []
+	},
 	setData: jest.fn()
 };
 
