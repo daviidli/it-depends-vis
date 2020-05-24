@@ -1,21 +1,26 @@
 {
   "files": {
-    "main.css": "/it-depends-vis/static/css/main.e0cb3527.chunk.css",
-    "main.js": "/it-depends-vis/static/js/main.130ce3b5.chunk.js",
-    "main.js.map": "/it-depends-vis/static/js/main.130ce3b5.chunk.js.map",
-    "runtime-main.js": "/it-depends-vis/static/js/runtime-main.cf6ed9f9.js",
-    "runtime-main.js.map": "/it-depends-vis/static/js/runtime-main.cf6ed9f9.js.map",
-    "static/js/2.dd59bbea.chunk.js": "/it-depends-vis/static/js/2.dd59bbea.chunk.js",
-    "static/js/2.dd59bbea.chunk.js.map": "/it-depends-vis/static/js/2.dd59bbea.chunk.js.map",
+    "main.css": "/it-depends-vis/static/css/main.79bf7f3e.chunk.css",
+    "main.js": "/it-depends-vis/static/js/main.1ee0388a.chunk.js",
+    "main.js.map": "/it-depends-vis/static/js/main.1ee0388a.chunk.js.map",
+    "runtime-main.js": "/it-depends-vis/static/js/runtime-main.90b89c4e.js",
+    "runtime-main.js.map": "/it-depends-vis/static/js/runtime-main.90b89c4e.js.map",
+    "static/css/2.691d15f3.chunk.css": "/it-depends-vis/static/css/2.691d15f3.chunk.css",
+    "static/js/2.7b55c05f.chunk.js": "/it-depends-vis/static/js/2.7b55c05f.chunk.js",
+    "static/js/2.7b55c05f.chunk.js.map": "/it-depends-vis/static/js/2.7b55c05f.chunk.js.map",
     "index.html": "/it-depends-vis/index.html",
-    "precache-manifest.fa05420bcb38d0c9d81ce3ec365e9ceb.js": "/it-depends-vis/precache-manifest.fa05420bcb38d0c9d81ce3ec365e9ceb.js",
+    "precache-manifest.8c980f920fc4d3e59a9059f6f4d6313d.js": "/it-depends-vis/precache-manifest.8c980f920fc4d3e59a9059f6f4d6313d.js",
     "service-worker.js": "/it-depends-vis/service-worker.js",
-    "static/css/main.e0cb3527.chunk.css.map": "/it-depends-vis/static/css/main.e0cb3527.chunk.css.map"
+    "static/css/2.691d15f3.chunk.css.map": "/it-depends-vis/static/css/2.691d15f3.chunk.css.map",
+    "static/css/main.79bf7f3e.chunk.css.map": "/it-depends-vis/static/css/main.79bf7f3e.chunk.css.map",
+    "static/js/2.7b55c05f.chunk.js.LICENSE.txt": "/it-depends-vis/static/js/2.7b55c05f.chunk.js.LICENSE.txt",
+    "static/media/example.png": "/it-depends-vis/static/media/example.2648648c.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.cf6ed9f9.js",
-    "static/js/2.dd59bbea.chunk.js",
-    "static/css/main.e0cb3527.chunk.css",
-    "static/js/main.130ce3b5.chunk.js"
+    "static/js/runtime-main.90b89c4e.js",
+    "static/css/2.691d15f3.chunk.css",
+    "static/js/2.7b55c05f.chunk.js",
+    "static/css/main.79bf7f3e.chunk.css",
+    "static/js/main.1ee0388a.chunk.js"
   ]
 }
